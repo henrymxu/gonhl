@@ -9,21 +9,21 @@ const endpointStatTypes = "/statTypes"
 
 func GetPlayer(c *Client, id int) Player {
 	var player struct{ People []Player `json:"people"` }
-	status := c.MakeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
+	status := c.makeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
 	fmt.Println(status)
 	return player.People[0]
 }
 
 func GetPlayerStats(c *Client, params *playerParams) []AllSkaterStats {
 	var playerStats struct{ Stats []AllSkaterStats `json:"stats"` }
-	status := c.MakeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
+	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
 	fmt.Println(status)
 	return playerStats.Stats
 }
 
 func GetPlayerStatsTypes(c *Client) []string {
 	var statTypes [] struct{ DisplayName string `json:"displayName"` }
-	status := c.MakeRequest(endpointStatTypes, nil, &statTypes)
+	status := c.makeRequest(endpointStatTypes, nil, &statTypes)
 	fmt.Println(status)
 	statTypesString := make([]string, len(statTypes))
 	for index, value := range statTypes {

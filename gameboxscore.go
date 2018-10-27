@@ -8,7 +8,7 @@ const endpointGameBoxscore = "/game/%d/boxscore"
 
 func GetGameBoxscore(c *Client, id int) Boxscore {
 	var boxscore Boxscore
-	status := c.MakeRequest(fmt.Sprintf(endpointGameBoxscore, id), nil, &boxscore)
+	status := c.makeRequest(fmt.Sprintf(endpointGameBoxscore, id), nil, &boxscore)
 	fmt.Println(status)
 	return boxscore
 }

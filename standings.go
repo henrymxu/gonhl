@@ -20,42 +20,42 @@ func GetStandings(c *Client, params *standingsParams) []Standings {
 	if params.standingsType != "" {
 		endpointCall = fmt.Sprintf(endpointStanding, params.standingsType)
 	}
-	status := c.MakeRequest(endpointCall, parseStandingsParams(params), &standings)
+	status := c.makeRequest(endpointCall, parseStandingsParams(params), &standings)
 	fmt.Println(status)
 	return standings.Records
 }
 
 func GetConferences(c *Client) []Conference {
 	var conferences conferences
-	status := c.MakeRequest(endpointConferences, nil, &conferences)
+	status := c.makeRequest(endpointConferences, nil, &conferences)
 	fmt.Println(status)
 	return conferences.Conferences
 }
 
 func GetConference(c *Client, id int) Conference {
 	var conferences conferences
-	status := c.MakeRequest(fmt.Sprintf(endpointConference, id), nil, &conferences)
+	status := c.makeRequest(fmt.Sprintf(endpointConference, id), nil, &conferences)
 	fmt.Println(status)
 	return conferences.Conferences[0]
 }
 
 func GetDivisions(c *Client) []Division {
 	var divisions divisions
-	status := c.MakeRequest(endpointDivisions, nil, &divisions)
+	status := c.makeRequest(endpointDivisions, nil, &divisions)
 	fmt.Println(status)
 	return divisions.Divisions
 }
 
 func GetDivision(c *Client, id int) Division {
 	var divisions divisions
-	status := c.MakeRequest(fmt.Sprintf(endpointDivision, id), nil, &divisions)
+	status := c.makeRequest(fmt.Sprintf(endpointDivision, id), nil, &divisions)
 	fmt.Println(status)
 	return divisions.Divisions[0]
 }
 
 func GetStandingsTypes(c *Client) []StandingsType {
 	var standingsTypes []StandingsType
-	status := c.MakeRequest(endpointStandingTypes, nil, &standingsTypes)
+	status := c.makeRequest(endpointStandingTypes, nil, &standingsTypes)
 	fmt.Println(status)
 	return standingsTypes
 }

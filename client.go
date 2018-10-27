@@ -31,7 +31,7 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) MakeRequest(endpoint string, params map[string]string, schema interface{}) (int){
+func (c *Client) makeRequest(endpoint string, params map[string]string, schema interface{}) (int){
 	request, _ := http.NewRequest("GET", c.baseURL + endpoint, nil)
 	request.Header.Set("Content-Type", "application/json")
 	query := request.URL.Query()

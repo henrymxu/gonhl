@@ -11,7 +11,7 @@ const endpointTeamStats = endpointTeam + "/stats"
 
 func GetTeams(c *Client, params teamsParams) []Team {
 	var teams teams
-	status := c.MakeRequest(endpointTeams, parseTeamsParams(params), &teams)
+	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
 	fmt.Println(status)
 	return teams.Teams
 }
@@ -19,21 +19,21 @@ func GetTeams(c *Client, params teamsParams) []Team {
 //TODO review this
 func GetTeam(c *Client, params teamsParams) Team {
 	var teams teams
-	status := c.MakeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
+	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
 	fmt.Println(status)
 	return teams.Teams[0]
 }
 
 func GetRoster(c *Client, teamId int) roster {
 	var roster roster
-	status := c.MakeRequest(fmt.Sprintf(endpointTeamRoster, teamId), nil, &roster)
+	status := c.makeRequest(fmt.Sprintf(endpointTeamRoster, teamId), nil, &roster)
 	fmt.Println(status)
 	return roster
 }
 
 func GetTeamStats(c *Client, teamId int) []AllTeamStats {
 	var stats struct {Stats []AllTeamStats `json:"stats"`}
-	status := c.MakeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &stats)
+	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &stats)
 	fmt.Println(status)
 	return stats.Stats
 }

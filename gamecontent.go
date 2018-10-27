@@ -6,7 +6,7 @@ const endpointGameContent = "/game/%d/content"
 
 func GetGameContent(c *Client, id int) GameContent {
 	var content GameContent
-	status := c.MakeRequest(fmt.Sprintf(endpointGameContent, id), nil, &content)
+	status := c.makeRequest(fmt.Sprintf(endpointGameContent, id), nil, &content)
 	fmt.Println(status)
 	return content
 }

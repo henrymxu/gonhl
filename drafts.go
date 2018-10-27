@@ -9,28 +9,28 @@ const endpointDraftProspect = endpointDraftProspects + "/%d"
 
 func GetCurrentDraft(c *Client) []Draft {
 	var draft drafts
-	status := c.MakeRequest(endpointDrafts, nil, &draft)
+	status := c.makeRequest(endpointDrafts, nil, &draft)
 	fmt.Println(status)
 	return draft.Drafts
 }
 
 func GetDraft(c *Client, year int) []Draft {
 	var draft drafts
-	status := c.MakeRequest(fmt.Sprintf(endpointDraft, year), nil, &draft)
+	status := c.makeRequest(fmt.Sprintf(endpointDraft, year), nil, &draft)
 	fmt.Println(status)
 	return draft.Drafts
 }
 
 func GetProspects(c *Client) []Prospect {
 	var prospects prospects
-	status := c.MakeRequest(endpointDraftProspects, nil, &prospects)
+	status := c.makeRequest(endpointDraftProspects, nil, &prospects)
 	fmt.Println(status)
 	return prospects.Prospects
 }
 
 func GetProspect(c *Client, id int) Prospect {
 	var prospects prospects
-	status := c.MakeRequest(fmt.Sprintf(endpointDraftProspect, id), nil, &prospects)
+	status := c.makeRequest(fmt.Sprintf(endpointDraftProspect, id), nil, &prospects)
 	fmt.Println(status)
 	return prospects.Prospects[0]
 }

@@ -9,7 +9,7 @@ const endpointGameLinescore = "/game/%d/linescore"
 
 func GetGameLinescore(c *Client, id int) Linescore {
 	var linescore Linescore
-	status := c.MakeRequest(fmt.Sprintf(endpointGameLinescore, id), nil, &linescore)
+	status := c.makeRequest(fmt.Sprintf(endpointGameLinescore, id), nil, &linescore)
 	fmt.Println(status)
 	return linescore
 }

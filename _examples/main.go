@@ -9,10 +9,10 @@ import (
 func main() {
 	client := gonhl.NewClient()
 	/*var roster gonhl.Teams
-	status := client.MakeRequest("/teams", params, &roster)
+	status := client.makeRequest("/teams", params, &roster)
 	fmt.Println(status)
 	fmt.Println(roster)*/
-	//client.MakeRequest("/draft/prospects", params)
+	//client.makeRequest("/draft/prospects", params)
 
 	//var schedule gonhl.Schedule
 	//testTeams(client)

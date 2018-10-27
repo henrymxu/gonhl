@@ -9,7 +9,7 @@ const endpointSchedule = "/schedule"
 
 func GetSchedule(c *Client, params *scheduleParams) Schedule {
 	var schedule Schedule
-	status := c.MakeRequest(endpointSchedule, parseScheduleParams(params), &schedule)
+	status := c.makeRequest(endpointSchedule, parseScheduleParams(params), &schedule)
 	fmt.Println(status)
 	return schedule
 }

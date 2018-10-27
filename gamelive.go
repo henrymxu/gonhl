@@ -10,14 +10,14 @@ const endpointGameLiveDiff = "/game/%d/feed/live/diffPatch"
 
 func GetGameLive(c *Client, id int) LiveFeed {
 	var live LiveFeed
-	status := c.MakeRequest(fmt.Sprintf(endpointGameLive, id), nil, &live)
+	status := c.makeRequest(fmt.Sprintf(endpointGameLive, id), nil, &live)
 	fmt.Println(status)
 	return live
 }
 
 func GetLiveData(c *Client, id int, time time.Time) Plays {
 	var live LiveFeed
-	status := c.MakeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
+	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
 		"startTimecode": createTimeStamp(time),
 	}, &live)
 	fmt.Println(status)
