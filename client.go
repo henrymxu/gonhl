@@ -12,6 +12,7 @@ import (
 
 const baseAddress = "http://statsapi.web.nhl.com/api/v1/"
 
+// A Client is required for api calls
 type Client struct {
 	baseURL string
 

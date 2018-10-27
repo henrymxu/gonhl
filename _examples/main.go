@@ -80,7 +80,7 @@ func testRoster(client *gonhl.Client) {
 }
 
 func testStats(client *gonhl.Client) {
-	stats := gonhl.GetStats(client, 1)
+	stats := gonhl.GetTeamStats(client, 1)
 	fmt.Println(stats)
 }
 

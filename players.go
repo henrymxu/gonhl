@@ -32,39 +32,6 @@ func GetPlayerStatsTypes(c *Client) []string {
 	return statTypesString
 }
 
-func parseParams(params *playerParams) map[string]string {
-	query := map[string]string{}
-	query["id"] = string(params.id)                     // Player id
-	query["season"] = createSeasonString(params.season) // Player stats for that season (use the year season started)
-	query["stats"] = combineStringArray(params.stat)    // Obtains single season statistics for a player
-	return query
-}
-
-type playerParams struct {
-	id     int
-	season int
-	stat   []string
-}
-
-func NewPlayerParams() *playerParams {
-	return &playerParams{}
-}
-
-func (pParams *playerParams) SetId(id int) *playerParams {
-	pParams.id = id
-	return pParams
-}
-
-func (pParams *playerParams) SetSeason(season int) *playerParams {
-	pParams.season = season
-	return pParams
-}
-
-func (pParams *playerParams) SetStat(stat ...string) *playerParams {
-	pParams.stat = stat
-	return pParams
-}
-
 type Player struct {
 	ID                 int      `json:"id"`
 	FullName           string   `json:"fullName"`
