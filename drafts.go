@@ -7,6 +7,7 @@ const endpointDraft = endpointDrafts + "/%d"
 const endpointDraftProspects = endpointDrafts + "/prospects"
 const endpointDraftProspect = endpointDraftProspects + "/%d"
 
+// GetCurrentDraft retrieves information about the current NHL draft.
 func GetCurrentDraft(c *Client) []Draft {
 	var draft drafts
 	status := c.makeRequest(endpointDrafts, nil, &draft)
@@ -14,6 +15,7 @@ func GetCurrentDraft(c *Client) []Draft {
 	return draft.Drafts
 }
 
+// GetDraft retrieves information about a NHL draft from a specific year.
 func GetDraft(c *Client, year int) []Draft {
 	var draft drafts
 	status := c.makeRequest(fmt.Sprintf(endpointDraft, year), nil, &draft)
@@ -21,6 +23,7 @@ func GetDraft(c *Client, year int) []Draft {
 	return draft.Drafts
 }
 
+// GetProspects retrieves information about all NHL prospects (beware large response).
 func GetProspects(c *Client) []Prospect {
 	var prospects prospects
 	status := c.makeRequest(endpointDraftProspects, nil, &prospects)
@@ -28,6 +31,7 @@ func GetProspects(c *Client) []Prospect {
 	return prospects.Prospects
 }
 
+// GetProspect retrieves information about a single NHL prospect using a prospect id.
 func GetProspect(c *Client, id int) Prospect {
 	var prospects prospects
 	status := c.makeRequest(fmt.Sprintf(endpointDraftProspect, id), nil, &prospects)

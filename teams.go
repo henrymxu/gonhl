@@ -9,6 +9,8 @@ const endpointTeam = endpointTeams + "/%d"
 const endpointTeamRoster = endpointTeam + "/roster"
 const endpointTeamStats = endpointTeam + "/stats"
 
+// GetTeams retrieves information about NHL teams based on teamsParams.
+// If no parameters are passed, the current NHL teams with minimal information are retrieved.
 func GetTeams(c *Client, params teamsParams) []Team {
 	var teams teams
 	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
@@ -24,6 +26,8 @@ func GetTeam(c *Client, params teamsParams) Team {
 	return teams.Teams[0]
 }
 
+// GetRoster retrieves the current roster of an NHL team using a team ID.
+// The same roster can be retrieved with the GetTeam(s) endpoints by using ShowTeamRoster() when building teamParams.
 func GetRoster(c *Client, teamId int) roster {
 	var roster roster
 	status := c.makeRequest(fmt.Sprintf(endpointTeamRoster, teamId), nil, &roster)
@@ -31,6 +35,8 @@ func GetRoster(c *Client, teamId int) roster {
 	return roster
 }
 
+// GetTeamStats retrieves the current stats of an NHL team using a team ID.
+// The same stats can be retrieved with the GetTeam(s) endpoints by using ShowTeamStats() when building teamParams.
 func GetTeamStats(c *Client, teamId int) []AllTeamStats {
 	var stats struct {Stats []AllTeamStats `json:"stats"`}
 	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &stats)

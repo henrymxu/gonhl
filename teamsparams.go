@@ -33,22 +33,22 @@ type teamsParams struct {
 	statsType    string // Specify which stats to get. Retrieve Standings Types from <TBD> endpoint
 }
 
-func (tParams *teamsParams) SetDetailedRoster() *teamsParams {
+func (tParams *teamsParams) ShowDetailedRoster() *teamsParams {
 	tParams.roster = true
 	return tParams
 }
 
-func (tParams *teamsParams) SetScheduleNext() *teamsParams {
+func (tParams *teamsParams) ShowScheduleNext() *teamsParams {
 	tParams.scheduleNext = true
 	return tParams
 }
 
-func (tParams *teamsParams) SetSchedulePrev() *teamsParams {
+func (tParams *teamsParams) ShowSchedulePrev() *teamsParams {
 	tParams.schedulePrev = true
 	return tParams
 }
 
-func (tParams *teamsParams) SetTeamStats() *teamsParams {
+func (tParams *teamsParams) ShowTeamStats() *teamsParams {
 	tParams.stats = true
 	return tParams
 }

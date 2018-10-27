@@ -6,6 +6,8 @@ import (
 
 const endpointGameBoxscore = "/game/%d/boxscore"
 
+// GetGameBoxscore retrieves the boxscore from a specific NHL game.
+// Boxscore contains less information than GetGameLiveFeed.
 func GetGameBoxscore(c *Client, id int) Boxscore {
 	var boxscore Boxscore
 	status := c.makeRequest(fmt.Sprintf(endpointGameBoxscore, id), nil, &boxscore)

@@ -18,7 +18,7 @@ func parseStandingsParams(params *standingsParams) map[string]string {
 		query["season"] = createSeasonString(params.season)
 	}
 	if &params.date != nil {
-		query["date"] = CreateDateFromTime(params.date)
+		query["date"] = CreateStringFromDate(params.date)
 	}
 	return query
 }

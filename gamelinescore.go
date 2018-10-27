@@ -7,6 +7,8 @@ import (
 
 const endpointGameLinescore = "/game/%d/linescore"
 
+// GetGameLinescore retrieves the linescore from a specific NHL game.
+// Linescore contains less information than GetGameBoxscore.
 func GetGameLinescore(c *Client, id int) Linescore {
 	var linescore Linescore
 	status := c.makeRequest(fmt.Sprintf(endpointGameLinescore, id), nil, &linescore)

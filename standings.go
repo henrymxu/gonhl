@@ -14,6 +14,8 @@ const endpointStandings = "/standings"
 const endpointStanding = endpointStandings + "/%s"
 const endpointStandingTypes = "/standingsTypes"
 
+// GetStandings retrieves the NHL schedule based on standingsParams.
+// If no parameters are passed, the current NHL standings are retrieved.
 func GetStandings(c *Client, params *standingsParams) []Standings {
 	var standings standings
 	endpointCall := endpointStandings
@@ -25,6 +27,7 @@ func GetStandings(c *Client, params *standingsParams) []Standings {
 	return standings.Records
 }
 
+// GetConferences retrieves information about the NHL conferences.
 func GetConferences(c *Client) []Conference {
 	var conferences conferences
 	status := c.makeRequest(endpointConferences, nil, &conferences)
@@ -32,6 +35,7 @@ func GetConferences(c *Client) []Conference {
 	return conferences.Conferences
 }
 
+// GetConference retrieves information about a specific NHL conference using a conference ID.
 func GetConference(c *Client, id int) Conference {
 	var conferences conferences
 	status := c.makeRequest(fmt.Sprintf(endpointConference, id), nil, &conferences)
@@ -39,6 +43,7 @@ func GetConference(c *Client, id int) Conference {
 	return conferences.Conferences[0]
 }
 
+// GetDivisions retrieves information about the NHL divisions.
 func GetDivisions(c *Client) []Division {
 	var divisions divisions
 	status := c.makeRequest(endpointDivisions, nil, &divisions)
@@ -46,6 +51,7 @@ func GetDivisions(c *Client) []Division {
 	return divisions.Divisions
 }
 
+// GetDivision retreives information about a specific NHL division using a division ID.
 func GetDivision(c *Client, id int) Division {
 	var divisions divisions
 	status := c.makeRequest(fmt.Sprintf(endpointDivision, id), nil, &divisions)
@@ -53,6 +59,8 @@ func GetDivision(c *Client, id int) Division {
 	return divisions.Divisions[0]
 }
 
+// GetStandingsTypes retrieves information about the various enums that can be used when retrieving NHL standings.
+// Pass values retrieved from here to SetStandingsType for standingsParams.
 func GetStandingsTypes(c *Client) []StandingsType {
 	var standingsTypes []StandingsType
 	status := c.makeRequest(endpointStandingTypes, nil, &standingsTypes)

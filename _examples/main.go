@@ -66,10 +66,10 @@ func testDivisions(client *gonhl.Client) {
 func testTeams(client *gonhl.Client) {
 	teamsParams := gonhl.NewTeamsParams()
 	teamsParams.
-		SetDetailedRoster().
-		SetScheduleNext().
-		SetSchedulePrev().
-		SetTeamStats()
+		ShowDetailedRoster().
+		ShowScheduleNext().
+		ShowSchedulePrev().
+		ShowTeamStats()
 	teams := gonhl.GetTeams(client, *teamsParams)
 	fmt.Println(teams)
 }
@@ -112,14 +112,14 @@ func testGameContent(client *gonhl.Client) {
 }
 
 func testGameLive(client *gonhl.Client) {
-	live := gonhl.GetGameLive(client, 2018020150)
+	live := gonhl.GetGameLiveFeed(client, 2018020150)
 	fmt.Println(live.GameData.Status.DetailedState)
 }
 
 func testLivePlays(client *gonhl.Client) {
 	location, _ := time.LoadLocation("America/Toronto")
 	date := time.Date(2018, 10, 27, 16, 0, 0, 0, location)
-	live := gonhl.GetLiveData(client, 2018020150, date)
+	live := gonhl.GetGamePlays(client, 2018020150, date)
 	fmt.Println(live.ScoringPlays)
 }
 

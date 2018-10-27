@@ -20,10 +20,10 @@ func parseScheduleParams(params *scheduleParams) map[string]string {
 		query["teamId"] = string(params.teamId)
 	}
 	if &params.date != nil {
-		query["date"] = CreateDateFromTime(params.date)
+		query["date"] = CreateStringFromDate(params.date)
 	} else if &params.startDate != nil {
-		query["startDate"] = CreateDateFromTime(params.startDate)
-		query["endDate"] = CreateDateFromTime(params.endDate)
+		query["startDate"] = CreateStringFromDate(params.startDate)
+		query["endDate"] = CreateStringFromDate(params.endDate)
 	}
 	return query
 }

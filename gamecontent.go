@@ -4,6 +4,8 @@ import "fmt"
 
 const endpointGameContent = "/game/%d/content"
 
+// GetGameContent retrieves all media related content pertaining to a specific NHL game.
+// Can contain various articles, videos, and images related to the game.
 func GetGameContent(c *Client, id int) GameContent {
 	var content GameContent
 	status := c.makeRequest(fmt.Sprintf(endpointGameContent, id), nil, &content)
