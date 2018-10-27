@@ -7,6 +7,7 @@ const endpointPlayerStats = "/people/%d/stats/"
 
 const endpointStatTypes = "/statTypes"
 
+// GetPlayer retrieves information about a single NHL player using a player ID.
 func GetPlayer(c *Client, id int) Player {
 	var player struct{ People []Player `json:"people"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
@@ -14,6 +15,8 @@ func GetPlayer(c *Client, id int) Player {
 	return player.People[0]
 }
 
+// GetPlayerStats retrieves stats about a single NHL player based on playerParams.
+// playerParams cannot be nil
 func GetPlayerStats(c *Client, params *playerParams) []AllSkaterStats {
 	var playerStats struct{ Stats []AllSkaterStats `json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
