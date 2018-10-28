@@ -31,7 +31,8 @@ func ExampleClient_GetDraft() {
 	// Output: 2018
 }
 
-// Example of retrieving Skater Stats for Connor McDavid
+// Example of retrieving Skater Stats.
+// Stats for Connor McDavid point total in the 2017 season.
 func ExampleClient_GetPlayerStats() {
 	client := gonhl.NewClient()
 	playerParams := gonhl.NewPlayerParams().
@@ -48,8 +49,9 @@ func ExampleClient_GetPlayerStats() {
 	// 108
 }
 
-// Example of retrieving Goalie Stats for Henrik Lundqvist
-func ExampleClient_GetPlayerStats2() {
+// Example of retrieving Goalie Stats
+// Stats for Henrik Lundqvist save percentage and wins in the in progress 2018 season.
+func ExampleClient_GetPlayerStats_second() {
 	client := gonhl.NewClient()
 	playerParams := gonhl.NewPlayerParams().
 		SetId(8468685).
