@@ -20,7 +20,7 @@ func (c *Client) GetGameLiveFeed(id int) LiveFeed {
 
 // GetGamePlays retrieves only the newest plays from a specific NHL game.
 // All plays after a certain time (not relative to game) are retrieved.
-func GetGamePlays(c *Client, id int, time time.Time) Plays {
+func (c *Client) GetGamePlays(id int, time time.Time) Plays {
 	var live LiveFeed
 	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
 		"startTimecode": createTimeStamp(time),
