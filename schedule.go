@@ -9,7 +9,7 @@ const endpointSchedule = "/schedule"
 
 // GetSchedule retrieves the NHL schedule based on ScheduleParams.
 // If no parameters are passed, the NHL schedule for the current day is retrieved.
-func GetSchedule(c *Client, params *ScheduleParams) Schedule {
+func (c *Client) GetSchedule(params *ScheduleParams) Schedule {
 	var schedule Schedule
 	status := c.makeRequest(endpointSchedule, parseScheduleParams(params), &schedule)
 	fmt.Println(status)
