@@ -14,9 +14,9 @@ const endpointStandings = "/standings"
 const endpointStanding = endpointStandings + "/%s"
 const endpointStandingTypes = "/standingsTypes"
 
-// GetStandings retrieves the NHL schedule based on standingsParams.
+// GetStandings retrieves the NHL schedule based on StandingsParams.
 // If no parameters are passed, the current NHL standings are retrieved.
-func GetStandings(c *Client, params *standingsParams) []Standings {
+func GetStandings(c *Client, params *StandingsParams) []Standings {
 	var standings standings
 	endpointCall := endpointStandings
 	if params.standingsType != "" {
@@ -60,7 +60,7 @@ func GetDivision(c *Client, id int) Division {
 }
 
 // GetStandingsTypes retrieves information about the various enums that can be used when retrieving NHL standings.
-// Pass values retrieved from here to SetStandingsType for standingsParams.
+// Pass values retrieved from here to SetStandingsType for StandingsParams.
 func GetStandingsTypes(c *Client) []StandingsType {
 	var standingsTypes []StandingsType
 	status := c.makeRequest(endpointStandingTypes, nil, &standingsTypes)

@@ -2,13 +2,13 @@ package gonhl
 
 import "time"
 
-func NewStandingsParams() *standingsParams {
-	return &standingsParams{
+func NewStandingsParams() *StandingsParams {
+	return &StandingsParams{
 		season: -1,
 	}
 }
 
-func parseStandingsParams(params *standingsParams) map[string]string {
+func parseStandingsParams(params *StandingsParams) map[string]string {
 	query := map[string]string{}
 	expand := expandQuery("standings", map[string]bool{
 		"record": params.record,
@@ -23,29 +23,38 @@ func parseStandingsParams(params *standingsParams) map[string]string {
 	return query
 }
 
-type standingsParams struct {
-	season        int       // Standings for a specified season (use the year season started)
-	date          time.Time // Standings on a specified date
-	record        bool      // Detailed information for each team including home and away records, record in shootouts, last ten games, and split head-to-head records against divisions and conferences
-	standingsType string    // Get NHL standings for a specific standing type.  Retrieve Standings Types from GetStandingsTypes endpoint
+type StandingsParams struct {
+	season        int
+	date          time.Time
+	record        bool
+	standingsType string
 }
 
-func (sp *standingsParams) ShowDetailedRecords() *standingsParams {
+// ShowDetailedRecords makes response include detailed information for each team.
+// This includes home and away records, record in shootouts, last ten games,
+// and split head-to-head records against divisions and conferences.
+func (sp *StandingsParams) ShowDetailedRecords() *StandingsParams {
 	sp.record = true
 	return sp
 }
 
-func (sp *standingsParams) SetSeason(season int) *standingsParams {
+// SetSeason specifies which season to use in response (use the year season started).
+// The response will represent the standings for that season.
+func (sp *StandingsParams) SetSeason(season int) *StandingsParams {
 	sp.season = season
 	return sp
 }
 
-func (sp *standingsParams) SetDate(date time.Time) *standingsParams {
+// SetDate specifies which date to use in response.
+// The response will represent the standings on that date.
+func (sp *StandingsParams) SetDate(date time.Time) *StandingsParams {
 	sp.date = date
 	return sp
 }
 
-func (sp *standingsParams) SetStandingsType(standingsType string) *standingsParams {
+// SetStandingsType specifies which standing type to use.
+// Retrieve Standings Types from GetStandingsTypes endpoint
+func (sp *StandingsParams) SetStandingsType(standingsType string) *StandingsParams {
 	sp.standingsType = standingsType
 	return sp
 }

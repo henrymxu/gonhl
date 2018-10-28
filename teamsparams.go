@@ -1,12 +1,12 @@
 package gonhl
 
-func NewTeamsParams() *teamsParams {
-	return &teamsParams{
+func NewTeamsParams() *TeamsParams {
+	return &TeamsParams{
 		season: -1,
 	}
 }
 
-func parseTeamsParams(params teamsParams) map[string]string {
+func parseTeamsParams(params TeamsParams) map[string]string {
 	query := map[string]string{}
 	expand := expandQuery("team", map[string]bool{
 		"roster":       params.roster,
@@ -23,47 +23,57 @@ func parseTeamsParams(params teamsParams) map[string]string {
 	return query
 }
 
-type teamsParams struct {
-	roster       bool   // Shows roster of active players for the specified team
-	scheduleNext bool   // Returns details of the upcoming game for a team
-	schedulePrev bool   // Same as above but for the last game played
-	stats        bool   // Returns the teams stats for the season
-	season       int    // Adding the season identifier shows the roster for that season (use the year season started)
-	ids          []int  // Can string team id together to get multiple teams
-	statsType    string // Specify which stats to get. Retrieve Standings Types from <TBD> endpoint
+type TeamsParams struct {
+	roster       bool
+	scheduleNext bool
+	schedulePrev bool
+	stats        bool
+	season       int
+	ids          []int
+	statsType    string
 }
 
-func (tParams *teamsParams) ShowDetailedRoster() *teamsParams {
+// ShowDetailedRoster makes response include the roster of active players for teams.
+func (tParams *TeamsParams) ShowDetailedRoster() *TeamsParams {
 	tParams.roster = true
 	return tParams
 }
 
-func (tParams *teamsParams) ShowScheduleNext() *teamsParams {
+// ShowScheduleNext makes response include details of the upcoming games for teams.
+func (tParams *TeamsParams) ShowScheduleNext() *TeamsParams {
 	tParams.scheduleNext = true
 	return tParams
 }
 
-func (tParams *teamsParams) ShowSchedulePrev() *teamsParams {
+// ShowSchedulePrev makes response include details of the previous games for teams.
+func (tParams *TeamsParams) ShowSchedulePrev() *TeamsParams {
 	tParams.schedulePrev = true
 	return tParams
 }
 
-func (tParams *teamsParams) ShowTeamStats() *teamsParams {
+// ShowTeamStats makes response include the teams stats for the season.
+func (tParams *TeamsParams) ShowTeamStats() *TeamsParams {
 	tParams.stats = true
 	return tParams
 }
 
-func (tParams *teamsParams) SetSeason(season int) *teamsParams {
+// SetSeason specifies which season to use in response (use the year season started).
+// The response will represent the roster for that season.
+func (tParams *TeamsParams) SetSeason(season int) *TeamsParams {
 	tParams.season = season
 	return tParams
 }
 
-func (tParams *teamsParams) SetTeamIds(ids ...int) *teamsParams {
+// SetTeamIds specifies which teams to include in response.
+// Can string team id together to get multiple teams.
+func (tParams *TeamsParams) SetTeamIds(ids ...int) *TeamsParams {
 	tParams.ids = ids
 	return tParams
 }
 
-func (tParams *teamsParams) SetStatsType(statsType string) *teamsParams {
+// SetStatsType specifies which team stats to get.
+// Retrieve Standings Types from <TBD> endpoint.
+func (tParams *TeamsParams) SetStatsType(statsType string) *TeamsParams {
 	tParams.statsType = statsType
 	return tParams
 }

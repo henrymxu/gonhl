@@ -216,28 +216,28 @@ type Keyword struct {
 	DisplayName string `json:"displayName"`
 }
 
+//		One136X640  ImageMetaData `json:"1136x640"`
+//		One024X576  ImageMetaData `json:"1024x576"`
+//		Nine60X540  ImageMetaData `json:"960x540"`
+//		Seven68X432 ImageMetaData `json:"768x432"`
+//		Six40X360   ImageMetaData `json:"640x360"`
+//		Five68X320  ImageMetaData `json:"568x320"`
+//		Three72X210 ImageMetaData `json:"372x210"`
+//		Three20X180 ImageMetaData `json:"320x180"`
+//		Two48X140   ImageMetaData `json:"248x140"`
+//		One24X70    ImageMetaData `json:"124x70"`
+//		// More Cuts from media
+//		Two568X1444 ImageMetaData `json:"2568x1444"`
+//		Two208X1242 ImageMetaData `json:"2208x1242"`
+//		Two048X1152 ImageMetaData `json:"2048x1152"`
+//		One704X960  ImageMetaData `json:"1704x960"`
+//		One536X864  ImageMetaData `json:"1536x864"`
+//		One284X722  ImageMetaData `json:"1284x722"`
+
 type Image struct {
-	Title   string `json:"title"`
-	AltText string `json:"altText"`
-	Cuts    struct {
-		One136X640  ImageMetaData `json:"1136x640"`
-		One024X576  ImageMetaData `json:"1024x576"`
-		Nine60X540  ImageMetaData `json:"960x540"`
-		Seven68X432 ImageMetaData `json:"768x432"`
-		Six40X360   ImageMetaData `json:"640x360"`
-		Five68X320  ImageMetaData `json:"568x320"`
-		Three72X210 ImageMetaData `json:"372x210"`
-		Three20X180 ImageMetaData `json:"320x180"`
-		Two48X140   ImageMetaData `json:"248x140"`
-		One24X70    ImageMetaData `json:"124x70"`
-		// More Cuts from media
-		Two568X1444 ImageMetaData `json:"2568x1444"`
-		Two208X1242 ImageMetaData `json:"2208x1242"`
-		Two048X1152 ImageMetaData `json:"2048x1152"`
-		One704X960  ImageMetaData `json:"1704x960"`
-		One536X864  ImageMetaData `json:"1536x864"`
-		One284X722  ImageMetaData `json:"1284x722"`
-	} `json:"cuts"`
+	Title   string                   `json:"title"`
+	AltText string                   `json:"altText"`
+	Cuts    map[string]ImageMetaData `json:"cuts"`
 }
 
 type ImageMetaData struct {

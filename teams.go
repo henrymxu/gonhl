@@ -9,9 +9,9 @@ const endpointTeam = endpointTeams + "/%d"
 const endpointTeamRoster = endpointTeam + "/roster"
 const endpointTeamStats = endpointTeam + "/stats"
 
-// GetTeams retrieves information about NHL teams based on teamsParams.
+// GetTeams retrieves information about NHL teams based on TeamsParams.
 // If no parameters are passed, the current NHL teams with minimal information are retrieved.
-func GetTeams(c *Client, params teamsParams) []Team {
+func GetTeams(c *Client, params TeamsParams) []Team {
 	var teams teams
 	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
 	fmt.Println(status)
@@ -19,7 +19,7 @@ func GetTeams(c *Client, params teamsParams) []Team {
 }
 
 //TODO review this
-func GetTeam(c *Client, params teamsParams) Team {
+func GetTeam(c *Client, params TeamsParams) Team {
 	var teams teams
 	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
 	fmt.Println(status)

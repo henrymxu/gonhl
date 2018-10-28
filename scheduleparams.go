@@ -2,13 +2,13 @@ package gonhl
 
 import "time"
 
-func NewScheduleParams() *scheduleParams {
-	return &scheduleParams{
+func NewScheduleParams() *ScheduleParams {
+	return &ScheduleParams{
 		teamId: -1,
 	}
 }
 
-func parseScheduleParams(params *scheduleParams) map[string]string {
+func parseScheduleParams(params *ScheduleParams) map[string]string {
 	query := map[string]string{}
 	expand := expandQuery("schedule", map[string]bool{
 		"broadcasts": params.broadcasts,
@@ -28,37 +28,45 @@ func parseScheduleParams(params *scheduleParams) map[string]string {
 	return query
 }
 
-type scheduleParams struct {
-	broadcasts bool      // Shows the broadcasts of the game
-	linescore  bool      // Linescore for completed games
-	ticket     bool      // Provides the different places to buy tickets for the upcoming games
-	teamId     int       // Limit results to a specific team. Team ids can be found through the teams endpoint
-	date       time.Time // Single defined date for the search
-	startDate  time.Time // Start date for the search
-	endDate    time.Time // End date for the search
+type ScheduleParams struct {
+	broadcasts bool
+	linescore  bool
+	ticket     bool
+	teamId     int
+	date       time.Time
+	startDate  time.Time
+	endDate    time.Time
 }
 
-func (sp *scheduleParams) ShowBroadcasts() *scheduleParams {
+// ShowBroadcasts makes response include the broadcasts for games.
+func (sp *ScheduleParams) ShowBroadcasts() *ScheduleParams {
 	sp.broadcasts = true
 	return sp
 }
 
-func (sp *scheduleParams) ShowLinescore() *scheduleParams {
+// ShowLinescore makes response include linescore for completed games.
+func (sp *ScheduleParams) ShowLinescore() *ScheduleParams {
 	sp.linescore = true
 	return sp
 }
 
-func (sp *scheduleParams) ShowTicketRetailers() *scheduleParams {
+// ShowTicketRetailers makes response include the different places to buy tickets for the upcoming games.
+func (sp *ScheduleParams) ShowTicketRetailers() *ScheduleParams {
 	sp.ticket = true
 	return sp
 }
 
-func (sp *scheduleParams) SetTeamId(teamId int) *scheduleParams {
+// SetTeamId limits the response to a specific team.
+// Team ids can be found through the teams endpoint.
+func (sp *ScheduleParams) SetTeamId(teamId int) *ScheduleParams {
 	sp.teamId = teamId
 	return sp
 }
 
-func (sp *scheduleParams) SetDate(date ...time.Time) *scheduleParams {
+// SetDate specifies a single date for the response or a range of dates for the response.
+// Providing a single date will return the schedule for that date.
+// Providing multiple dates will return the schedule for dates starting from the 1st date to the 2nd date.
+func (sp *ScheduleParams) SetDate(date ...time.Time) *ScheduleParams {
 	if len(date) == 1 {
 		sp.date = date[0]
 	} else {
