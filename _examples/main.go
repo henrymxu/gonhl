@@ -8,16 +8,6 @@ import (
 
 func main() {
 	client := gonhl.NewClient()
-	/*var roster gonhl.Teams
-	status := client.makeRequest("/teams", params, &roster)
-	fmt.Println(status)
-	fmt.Println(roster)*/
-	//client.makeRequest("/draft/prospects", params)
-
-	//var schedule gonhl.Schedule
-	//testTeams(client)
-	//testPlayerStats(client)
-	//testBoxscore(client)
 	testLinescore(client)
 }
 
@@ -29,7 +19,7 @@ func testSchedule(client *gonhl.Client) {
 		ShowBroadcasts().
 		ShowLinescore().
 		ShowTicketRetailers()
-	schedule := gonhl.GetSchedule(client, scheduleParams)
+	schedule := client.GetSchedule(scheduleParams)
 	fmt.Println(schedule.Dates[0].Games[0].Linescore)
 }
 
@@ -40,26 +30,26 @@ func testStandings(client *gonhl.Client) {
 		SetDate(date).
 		ShowDetailedRecords().
 		SetSeason(2017).SetStandingsType("wildCard")
-	standings := gonhl.GetStandings(client, standingsParams)
+	standings := client.GetStandings(standingsParams)
 	fmt.Println(standings)
 }
 
 func testStandingsTypes(client *gonhl.Client) {
-	standingsTypes := gonhl.GetStandingsTypes(client)
+	standingsTypes := client.GetStandingsTypes()
 	fmt.Println(standingsTypes)
 }
 
 func testConferences(client *gonhl.Client) {
-	conferences := gonhl.GetConferences(client)
+	conferences := client.GetConferences()
 	fmt.Println(conferences)
-	conference := gonhl.GetConference(client, 6) //Eastern
+	conference := client.GetConference(6) //Eastern
 	fmt.Println(conference)
 }
 
 func testDivisions(client *gonhl.Client) {
-	divisions := gonhl.GetDivisions(client)
+	divisions := client.GetDivisions()
 	fmt.Println(divisions)
-	division := gonhl.GetDivision(client, 18) //Metropolitan
+	division := client.GetDivision(18) //Metropolitan
 	fmt.Println(division)
 }
 
@@ -70,17 +60,17 @@ func testTeams(client *gonhl.Client) {
 		ShowScheduleNext().
 		ShowSchedulePrev().
 		ShowTeamStats()
-	teams := gonhl.GetTeams(client, *teamsParams)
+	teams := client.GetTeams(*teamsParams)
 	fmt.Println(teams)
 }
 
 func testRoster(client *gonhl.Client) {
-	roster := gonhl.GetRoster(client, 1)
+	roster := client.GetRoster(1)
 	fmt.Println(roster)
 }
 
 func testStats(client *gonhl.Client) {
-	stats := gonhl.GetTeamStats(client, 1)
+	stats := client.GetTeamStats(1)
 	fmt.Println(stats)
 }
 
@@ -89,46 +79,46 @@ func testPlayerStats(client *gonhl.Client) {
 	statsParams.SetId(8476368).
 		SetSeason(2017).
 		SetStat("byMonth", "vsTeam")
-	stats := gonhl.GetPlayerStats(client, statsParams)
+	stats := client.GetPlayerStats(statsParams)
 	fmt.Println(stats[0].Splits[0].Stat)
 
-	statTypes := gonhl.GetPlayerStatsTypes(client)
+	statTypes := client.GetPlayerStatsTypes()
 	fmt.Println(statTypes)
 }
 
 func testDraft(client *gonhl.Client) {
-	draft := gonhl.GetDraft(client, 2015)
+	draft := client.GetDraft(2015)
 	fmt.Println(draft)
 }
 
 func testProspect(client *gonhl.Client) {
-	prospect := gonhl.GetProspect(client, 54223)
+	prospect := client.GetProspect(54223)
 	fmt.Println(prospect)
 }
 
 func testGameContent(client *gonhl.Client) {
-	content := gonhl.GetGameContent(client, 2018020134)
+	content := client.GetGameContent(2018020134)
 	fmt.Println(content.Editorial.Preview.Items[0].TokenData)
 }
 
 func testGameLive(client *gonhl.Client) {
-	live := gonhl.GetGameLiveFeed(client, 2018020150)
+	live := client.GetGameLiveFeed(2018020150)
 	fmt.Println(live.GameData.Status.DetailedState)
 }
 
 func testLivePlays(client *gonhl.Client) {
 	location, _ := time.LoadLocation("America/Toronto")
 	date := time.Date(2018, 10, 27, 16, 0, 0, 0, location)
-	live := gonhl.GetGamePlays(client, 2018020150, date)
+	live := client.GetGamePlays(2018020150, date)
 	fmt.Println(live.ScoringPlays)
 }
 
 func testBoxscore(client *gonhl.Client) {
-	boxscore := gonhl.GetGameBoxscore(client, 2018020150)
+	boxscore := client.GetGameBoxscore(2018020150)
 	fmt.Println(boxscore)
 }
 
 func testLinescore(client *gonhl.Client) {
-	linescore := gonhl.GetGameLinescore(client, 2018020150)
+	linescore := client.GetGameLinescore(2018020150)
 	fmt.Println(linescore)
 }
