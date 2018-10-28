@@ -8,7 +8,7 @@ const endpointPlayerStats = "/people/%d/stats/"
 const endpointStatTypes = "/statTypes"
 
 // GetPlayer retrieves information about a single NHL player using a player ID.
-func GetPlayer(c *Client, id int) Player {
+func (c *Client) GetPlayer(id int) Player {
 	var player struct{ People []Player `json:"people"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
 	fmt.Println(status)
@@ -17,7 +17,7 @@ func GetPlayer(c *Client, id int) Player {
 
 // GetPlayerStats retrieves stats about a single NHL player based on PlayerParams.
 // The PlayerParams must not be nil and PlayerParams.Id must not be nil.
-func GetPlayerStats(c *Client, params *PlayerParams) []AllSkaterStats {
+func (c *Client) GetPlayerStats(params *PlayerParams) []AllSkaterStats {
 	var playerStats struct{ Stats []AllSkaterStats `json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
 	fmt.Println(status)
@@ -26,7 +26,7 @@ func GetPlayerStats(c *Client, params *PlayerParams) []AllSkaterStats {
 
 // GetPlayerStatsTypes retrieves information about the various enums that can be used when retrieving player stats.
 // Pass values retrieved from here to SetStat for PlayerParams.
-func GetPlayerStatsTypes(c *Client) []string {
+func (c *Client) GetPlayerStatsTypes() []string {
 	var statTypes [] struct{ DisplayName string `json:"displayName"` }
 	status := c.makeRequest(endpointStatTypes, nil, &statTypes)
 	fmt.Println(status)
