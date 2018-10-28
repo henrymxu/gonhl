@@ -10,8 +10,8 @@ func parseTeamsParams(params TeamsParams) map[string]string {
 	query := map[string]string{}
 	expand := expandQuery("team", map[string]bool{
 		"roster":       params.roster,
-		"scheduleNext": params.scheduleNext,
-		"schedulePrev": params.schedulePrev,
+		"schedule.next": params.scheduleNext,
+		"schedule.previous": params.schedulePrev,
 		"stats":        params.stats,
 	})
 	query["expand"] = expand

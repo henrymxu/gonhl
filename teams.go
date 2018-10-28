@@ -28,8 +28,8 @@ func (c *Client) GetTeam(params TeamsParams) Team {
 
 // GetRoster retrieves the current roster of an NHL team using a team ID.
 // The same roster can be retrieved with the GetTeam(s) endpoints by using ShowTeamRoster() when building teamParams.
-func (c *Client) GetRoster(teamId int) roster {
-	var roster roster
+func (c *Client) GetRoster(teamId int) Roster {
+	var roster Roster
 	status := c.makeRequest(fmt.Sprintf(endpointTeamRoster, teamId), nil, &roster)
 	fmt.Println(status)
 	return roster
@@ -50,34 +50,36 @@ type teams struct {
 }
 
 // API Endpoint
-type roster struct {
+type Roster struct {
 	Roster []RosterPlayer `json:"roster"`
 	Link   string         `json:"link"`
 }
 
 type Team struct {
-	ID              int        `json:"id"`
-	Name            string     `json:"name"`
-	Link            string     `json:"link"`
-	Venue           Venue      `json:"venue"`
-	Abbreviation    string     `json:"abbreviation"`
-	TriCode         string     `json:"triCode"`
-	TeamName        string     `json:"teamName"`
-	LocationName    string     `json:"locationName"`
-	FirstYearOfPlay string     `json:"firstYearOfPlay,omitempty"`
-	Division        Division   `json:"division"`
-	Conference      Conference `json:"conference"`
-	Franchise       Franchise  `json:"franchise"`
-	ShortName       string     `json:"shortName"`
-	OfficialSiteURL string     `json:"officialSiteUrl"`
-	FranchiseID     int        `json:"franchiseId"`
-	Active          bool       `json:"active"`
+	ID                   int            `json:"id"`
+	Name                 string         `json:"name"`
+	Link                 string         `json:"link"`
+	Venue                Venue          `json:"venue"`
+	Abbreviation         string         `json:"abbreviation"`
+	TriCode              string         `json:"triCode"`
+	TeamName             string         `json:"teamName"`
+	LocationName         string         `json:"locationName"`
+	FirstYearOfPlay      string         `json:"firstYearOfPlay,omitempty"`
+	Division             Division       `json:"division"`
+	Conference           Conference     `json:"conference"`
+	Franchise            Franchise      `json:"franchise"`
+	TeamStats            []AllTeamStats `json:"teamStats"`
+	Roster               Roster         `json:"roster"`
+	NextGameSchedule     Schedule       `json:"nextGameSchedule"`
+	PreviousGameSchedule Schedule       `json:"previousGameSchedule"`
+	ShortName            string         `json:"shortName"`
+	OfficialSiteURL      string         `json:"officialSiteUrl"`
+	FranchiseID          int            `json:"franchiseId"`
+	Active               bool           `json:"active"`
 }
 
 type AllTeamStats struct {
-	Type struct {
-		DisplayName string `json:"displayName"`
-	} `json:"type"`
+	Type StatType `json:"type"`
 	Splits []struct {
 		Stat TeamStats `json:"stat"`
 		Team Team      `json:"team"`

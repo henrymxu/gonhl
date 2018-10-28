@@ -48,11 +48,13 @@ type Game struct {
 		Away GameTeam `json:"away"`
 		Home GameTeam `json:"home"`
 	} `json:"teams"`
-	Linescore  Linescore   `json:"linescore"`
-	Venue      Venue       `json:"venue"`
-	Tickets    []Ticket    `json:"tickets"`
-	Broadcasts []Broadcast `json:"broadcasts"`
-	Content    Content     `json:"content"`
+	Linescore       Linescore      `json:"linescore"`
+	Venue           Venue          `json:"venue"`
+	Tickets         []Ticket       `json:"tickets"`
+	Broadcasts      []Broadcast    `json:"broadcasts"`
+	RadioBroadcasts RadioBroadcast `json:"radioBroadcasts"`
+	Content         Content        `json:"content"`
+	Metadata        MetaData       `json:"metadata"`
 }
 
 type Status struct {
@@ -82,6 +84,16 @@ type Broadcast struct {
 	Language string `json:"language"`
 }
 
+type RadioBroadcast struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
 type Content struct {
 	Link string `json:"link"`
+}
+
+type MetaData struct {
+	IsManuallyScored bool `json:"isManuallyScored"`
+	IsSplitSquad     bool `json:"isSplitSquad"`
 }

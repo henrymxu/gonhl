@@ -80,7 +80,7 @@ func testPlayerStats(client *gonhl.Client) {
 		SetSeason(2017).
 		SetStat("byMonth", "vsTeam")
 	stats := client.GetPlayerStats(statsParams)
-	fmt.Println(stats[0].Splits[0].Stat)
+	fmt.Println(stats[0].Splits[0].SkaterStat)
 
 	statTypes := client.GetPlayerStatsTypes()
 	fmt.Println(statTypes)
