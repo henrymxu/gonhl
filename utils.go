@@ -2,6 +2,7 @@ package gonhl
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -16,6 +17,21 @@ func CreateDateFromString(dateString string) (time.Time, error) {
 // CreateStringFromDate converts a time.Time object to a string representing a date with format `yyyy-mm-dd`.
 func CreateStringFromDate(date time.Time) string {
 	return fmt.Sprintf("%d-%d-%d", date.Year(), date.Month(), date.Day())
+}
+
+// ConvertTimeToSeconds takes a time string with format mm:ss and returns an int representing the total seconds.
+// These time strings can be found from responses for player stats and various boxscore information
+func ConvertTimeToSeconds(timeString string) int {
+	parts := strings.Split(timeString, ":")
+	minutes, _ := strconv.Atoi(parts[0])
+	seconds, _ := strconv.Atoi(parts[1])
+	return minutes * 60 + seconds
+}
+
+// IsPlayerGoalie checks if the given PlayerStats represents a Goalie.
+// True for Goalie, False for Skater
+func IsPlayerGoalie(stats PlayerStats) bool {
+	return stats.SavePercentage != nil
 }
 
 // expandQuery concatenates boolean flags to be used in HTTP queries.

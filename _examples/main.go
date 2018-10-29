@@ -8,7 +8,7 @@ import (
 
 func main() {
 	client := gonhl.NewClient()
-	testLinescore(client)
+	testBoxscore(client)
 }
 
 func testSchedule(client *gonhl.Client) {
@@ -80,7 +80,7 @@ func testPlayerStats(client *gonhl.Client) {
 		SetSeason(2017).
 		SetStat("byMonth", "vsTeam")
 	stats := client.GetPlayerStats(statsParams)
-	fmt.Println(stats[0].Splits[0].SkaterStat)
+	fmt.Println(stats[0].Splits[0].Stat)
 
 	statTypes := client.GetPlayerStatsTypes()
 	fmt.Println(statTypes)

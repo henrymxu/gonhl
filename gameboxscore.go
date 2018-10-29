@@ -44,8 +44,8 @@ type Skater struct {
 	JerseyNumber string   `json:"jerseyNumber"`
 	Position     Position `json:"position"`
 	Stats        struct {
-		SkaterStats PlayerStats `json:"skaterStats"`
-		GoalieStats GoalieStats `json:"goalieStats"`
+		SkaterStats SkaterGameStats `json:"skaterStats"`
+		GoalieStats GoalieGameStats `json:"goalieStats"`
 	} `json:"stats"`
 }
 

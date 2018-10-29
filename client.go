@@ -32,6 +32,12 @@ func NewClient() *Client {
 }
 
 func (c *Client) makeRequest(endpoint string, params map[string]string, schema interface{}) (int){
+	body, status := c.makeRequestWithoutJson(endpoint, params)
+	json.Unmarshal(body, schema)
+	return status
+}
+
+func (c *Client) makeRequestWithoutJson(endpoint string, params map[string]string) ([]byte, int){
 	request, _ := http.NewRequest("GET", c.baseURL + endpoint, nil)
 	request.Header.Set("Content-Type", "application/json")
 	query := request.URL.Query()
@@ -44,8 +50,7 @@ func (c *Client) makeRequest(endpoint string, params map[string]string, schema i
 	//check(err)
 	defer response.Body.Close()
 	body, _ := ioutil.ReadAll(response.Body)
-	json.Unmarshal(body, schema)
-	return response.StatusCode
+	return body, response.StatusCode
 }
 
 func buildCustomTransport() *http.Transport {

@@ -41,26 +41,29 @@ func ExampleClient_GetPlayerStats() {
 		SetSeason(2017)
 	player := client.GetPlayerStats(playerParams)
 	fmt.Println(player[0].Type.DisplayName)
+
+	playerStat, _ := player[0].Splits[0].Stat.(gonhl.PlayerStats)
 	fmt.Println(player[0].Splits[0].Season)
-	fmt.Println(player[0].Splits[0].Stat.Points)
+	fmt.Println(playerStat.Points)
 	// Output:
 	// statsSingleSeason
 	// 20172018
 	// 108
 }
 
-// Example of retrieving Goalie Stats
+// Example of retrieving Goalie Stats.
 // Stats for Henrik Lundqvist save percentage and wins in the in progress 2018 season.
-func ExampleClient_GetPlayerStats_second() {
+func ExampleClient_GetPlayerStats_goalie() {
 	client := gonhl.NewClient()
 	playerParams := gonhl.NewPlayerParams().
 		SetId(8468685).
-		SetStat("vsConference").
+		SetStat("vsConference", "vsDivision").
 		SetSeason(2018)
 	player := client.GetPlayerStats(playerParams)
 	fmt.Println(player[0].Type.DisplayName)
-	fmt.Println(player[0].Splits[0].Stat.SavePercentage != nil)
-	fmt.Println(player[0].Splits[0].Stat.Wins != nil)
+	playerStat, _ := player[0].Splits[0].Stat.(gonhl.PlayerStats)
+	fmt.Println(playerStat.SavePercentage != nil)
+	fmt.Println(playerStat.Wins != nil)
 	// Output:
 	// vsConference
 	// true

@@ -1,6 +1,7 @@
 package gonhl
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -19,12 +20,34 @@ func (c *Client) GetPlayer(id int) Player {
 
 // GetPlayerStats retrieves stats about a single NHL player based on PlayerParams.
 // The PlayerParams must not be nil and all fields must be set (id, season, statType).
-// To determine if a skater or goalie is retrieved, position specific types can be checked for nil.
-func (c *Client) GetPlayerStats(params *PlayerParams) ([]AllPlayerStats) {
-	var playerStats struct{ Stats []AllPlayerStats `json:"stats"` }
+// To determine if a skater or goalie is retrieved, use IsPlayerGoalie.
+// Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
+func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType) {
+	var playerStats struct{ Stats []playerStatsForType`json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
 	fmt.Println(status)
-	return playerStats.Stats
+	parsedStats := make([]PlayerStatsForType, len(playerStats.Stats))
+	for statType, stat := range playerStats.Stats {
+		parsedStats[statType].Type = stat.Type
+		parsedStats[statType].Splits = make([]StatSplits, len(stat.Splits))
+		for splitType, split := range stat.Splits {
+			switch stat.Type.DisplayName {
+			case "regularSeasonStatRankings":
+				var rankStat PlayerStatsByRank
+				json.Unmarshal(*split.Stat, &rankStat)
+				parsedStats[statType].Splits[splitType].Stat = rankStat
+			case "goalsByGameSituation":
+				var situationStat GoalsBySituation
+				json.Unmarshal(*split.Stat, &situationStat)
+				parsedStats[statType].Splits[splitType].Stat = situationStat
+			default:
+				var playerStat PlayerStats
+				json.Unmarshal(*split.Stat, &playerStat)
+				parsedStats[statType].Splits[splitType].Stat = playerStat
+			}
+		}
+	}
+	return parsedStats
 }
 
 // GetPlayerStatsTypes retrieves information about the various enums that can be used when retrieving player stats.
@@ -72,12 +95,46 @@ type Position struct {
 	Abbreviation string `json:"abbreviation"`
 }
 
-type AllPlayerStats struct {
+type playerStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
-		Season string      `json:"season"`
-		Stat   PlayerStats `json:"stat"`
+		Season             string              `json:"season"`
+		Stat               *json.RawMessage    `json:"stat"`
+		IsHome             *bool               `json:"isHome"`
+		IsWin              *bool               `json:"isWin"`
+		IsOT               *bool               `json:"isOT"`
+		Month              *int                `json:"month"`
+		Opponent           StatSplitIdentifier `json:"opponent"`
+		OpponentDivision   StatSplitIdentifier `json:"opponentDivision"`
+		OpponentConference StatSplitIdentifier `json:"opponentConference"`
 	} `json:"splits"`
+}
+
+type PlayerStatsForType struct {
+	Type   StatType `json:"type"`
+	Splits []StatSplits `json:"splits"`
+}
+
+type StatSplits struct {
+	Season             string              `json:"season"`
+	Stat               interface{}    		`json:"stat"`
+
+	IsHome             *bool               `json:"isHome"`
+
+	IsWin              *bool               `json:"isWin"`
+	IsOT               *bool               `json:"isOT"`
+
+	Month              *int                `json:"month"`
+
+	Opponent           StatSplitIdentifier `json:"opponent"`
+	OpponentDivision   StatSplitIdentifier `json:"opponentDivision"`
+	OpponentConference StatSplitIdentifier `json:"opponentConference"`
+}
+
+type StatSplitIdentifier struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Link string `json:"link"`
 }
 
 type StatType struct {
@@ -101,7 +158,7 @@ type PlayerStats struct {
 	PowerPlayPoints             *int     `json:"powerPlayPoints"`
 	PowerPlayTimeOnIce          *string  `json:"powerPlayTimeOnIce"`
 	EvenTimeOnIce               *string  `json:"evenTimeOnIce"`
-	PenaltyMinutes              *string  `json:"penaltyMinutes"`
+	PenaltyMinutes              *int     `json:"penaltyMinutes,string"`
 	FaceOffPct                  *float64 `json:"faceOffPct"`
 	ShotPct                     *float64 `json:"shotPct"`
 	GameWinningGoals            *int     `json:"gameWinningGoals"`
@@ -138,4 +195,57 @@ type PlayerStats struct {
 	PowerPlaySavePercentage    *float64 `json:"powerPlaySavePercentage"`
 	ShortHandedSavePercentage  *float64 `json:"shortHandedSavePercentage"`
 	EvenStrengthSavePercentage *float64 `json:"evenStrengthSavePercentage"`
+}
+
+type PlayerStatsByRank struct {
+	// Skater Stats
+	RankPowerPlayGoals   string `json:"rankPowerPlayGoals"`
+	RankBlockedShots     string `json:"rankBlockedShots"`
+	RankAssists          string `json:"rankAssists"`
+	RankShotPct          string `json:"rankShotPct"`
+	RankGoals            string `json:"rankGoals"`
+	RankHits             string `json:"rankHits"`
+	RankPenaltyMinutes   string `json:"rankPenaltyMinutes"`
+	RankShortHandedGoals string `json:"rankShortHandedGoals"`
+	RankPlusMinus        string `json:"rankPlusMinus"`
+	RankShots            string `json:"rankShots"`
+	RankPoints           string `json:"rankPoints"`
+	RankOvertimeGoals    string `json:"rankOvertimeGoals"`
+	RankGamesPlayed      string `json:"rankGamesPlayed"`
+
+	// Goalie Stats
+	ShotsAgainst        string `json:"shotsAgainst"`
+	Ot                  string `json:"ot"`
+	PenaltyMinutes      string `json:"penaltyMinutes"`
+	TimeOnIce           string `json:"timeOnIce"`
+	ShutOuts            string `json:"shutOuts"`
+	Saves               string `json:"saves"`
+	Losses              string `json:"losses"`
+	GoalsAgainst        string `json:"goalsAgainst"`
+	SavePercentage      string `json:"savePercentage"`
+	Games               string `json:"games"`
+	GoalsAgainstAverage string `json:"goalsAgainstAverage"`
+	Wins                string `json:"wins"`
+}
+
+type GoalsBySituation struct {
+	GoalsInFirstPeriod       int `json:"goalsInFirstPeriod"`
+	GoalsInSecondPeriod      int `json:"goalsInSecondPeriod"`
+	GoalsInThirdPeriod       int `json:"goalsInThirdPeriod"`
+	GoalsInOvertime          int `json:"goalsInOvertime"`
+	ShootOutGoals            int `json:"shootOutGoals"`
+	ShootOutShots            int `json:"shootOutShots"`
+	GoalsTrailingByOne       int `json:"goalsTrailingByOne"`
+	GoalsTrailingByTwo       int `json:"goalsTrailingByTwo"`
+	GoalsTrailingByThreePlus int `json:"goalsTrailingByThreePlus"`
+	GoalsWhenTied            int `json:"goalsWhenTied"`
+	GoalsLeadingByOne        int `json:"goalsLeadingByOne"`
+	GoalsLeadingByTwo        int `json:"goalsLeadingByTwo"`
+	GoalsLeadingByThreePlus  int `json:"goalsLeadingByThreePlus"`
+	PenaltyGoals             int `json:"penaltyGoals"`
+	PenaltyShots             int `json:"penaltyShots"`
+
+	//Skaters Only
+	GameWinningGoals         *int `json:"gameWinningGoals"`
+	EmptyNetGoals            *int `json:"emptyNetGoals"`
 }
