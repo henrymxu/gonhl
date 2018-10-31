@@ -1,6 +1,7 @@
 package gonhl
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -15,7 +16,7 @@ func (c *Client) GetTeams(params TeamsParams) []Team {
 	var teams teams
 	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
 	fmt.Println(status)
-	return teams.Teams
+	return parseTeams(teams.Teams)
 }
 
 //TODO review this
@@ -23,7 +24,39 @@ func (c *Client) GetTeam(params TeamsParams) Team {
 	var teams teams
 	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
 	fmt.Println(status)
-	return teams.Teams[0]
+	return parseTeams(teams.Teams)[0]
+}
+
+func parseTeams (teams []team) []Team{
+	parsedTeams := make([]Team, len(teams))
+	for index, team := range teams {
+		parsedTeams[index].TeamStats = parseStats(team.TeamStats)
+		parsedTeams[index].internalTeam = team.internalTeam
+	}
+	return parsedTeams
+}
+
+func parseStats (stats []teamStatsForType) []TeamStatsForType {
+	parsedStats := make([]TeamStatsForType, len(stats))
+	for statType, stat := range stats {
+		parsedStats[statType].Splits = make([]TeamStatsSplit, len(stat.Splits))
+		for splitType, split := range stat.Splits {
+			var testmap map[string]string
+			json.Unmarshal(*split.Stat, &testmap)
+			if _, ok := testmap["wins"]; ok {
+				var rankedStats TeamStatsRank
+				json.Unmarshal(*split.Stat, &rankedStats)
+				parsedStats[statType].Splits[splitType].Stat = rankedStats
+			} else {
+				var actualStats TeamStats
+				json.Unmarshal(*split.Stat, &actualStats)
+				parsedStats[statType].Splits[splitType].Stat = actualStats
+			}
+			parsedStats[statType].Splits[splitType].Team = split.Team
+		}
+		parsedStats[statType].Type = stat.Type
+	}
+	return parsedStats
 }
 
 // GetRoster retrieves the current roster of an NHL team using a team ID.
@@ -35,18 +68,19 @@ func (c *Client) GetRoster(teamId int) Roster {
 	return roster
 }
 
+//TODO Fix this, missing ranking stats
 // GetTeamStats retrieves the current stats of an NHL team using a team ID.
 // The same stats can be retrieved with the GetTeam(s) endpoints by using ShowTeamStats() when building teamParams.
-func (c *Client) GetTeamStats(teamId int) []AllTeamStats {
-	var stats struct{ Stats []AllTeamStats `json:"stats"` }
-	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &stats)
+func (c *Client) GetTeamStats(teamId int) []TeamStatsForType {
+	var teamStats struct{ Stats []teamStatsForType `json:"stats"` }
+	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &teamStats)
 	fmt.Println(status)
-	return stats.Stats
+	return parseStats(teamStats.Stats)
 }
 
 // API Endpoint
 type teams struct {
-	Teams []Team `json:"teams,omitempty"`
+	Teams []team `json:"teams,omitempty"`
 }
 
 // API Endpoint
@@ -55,35 +89,54 @@ type Roster struct {
 	Link   string         `json:"link"`
 }
 
-type Team struct {
-	ID                   int            `json:"id"`
-	Name                 string         `json:"name"`
-	Link                 string         `json:"link"`
-	Venue                Venue          `json:"venue"`
-	Abbreviation         string         `json:"abbreviation"`
-	TriCode              string         `json:"triCode"`
-	TeamName             string         `json:"teamName"`
-	LocationName         string         `json:"locationName"`
-	FirstYearOfPlay      string         `json:"firstYearOfPlay,omitempty"`
-	Division             Division       `json:"division"`
-	Conference           Conference     `json:"conference"`
-	Franchise            Franchise      `json:"franchise"`
-	TeamStats            []AllTeamStats `json:"teamStats"`
-	Roster               Roster         `json:"roster"`
-	NextGameSchedule     Schedule       `json:"nextGameSchedule"`
-	PreviousGameSchedule Schedule       `json:"previousGameSchedule"`
-	ShortName            string         `json:"shortName"`
-	OfficialSiteURL      string         `json:"officialSiteUrl"`
-	FranchiseID          int            `json:"franchiseId"`
-	Active               bool           `json:"active"`
+type team struct {
+	TeamStats            []teamStatsForType `json:"teamStats"`
+	internalTeam
 }
 
-type AllTeamStats struct {
-	Type StatType `json:"type"`
+type Team struct {
+	TeamStats            []TeamStatsForType `json:"teamStats"`
+	internalTeam
+}
+
+type internalTeam struct {
+	ID                   int                `json:"id"`
+	Name                 string             `json:"name"`
+	Link                 string             `json:"link"`
+	Venue                Venue              `json:"venue"`
+	Abbreviation         string             `json:"abbreviation"`
+	TriCode              string             `json:"triCode"`
+	TeamName             string             `json:"teamName"`
+	LocationName         string             `json:"locationName"`
+	FirstYearOfPlay      string             `json:"firstYearOfPlay,omitempty"`
+	Division             Division           `json:"division"`
+	Conference           Conference         `json:"conference"`
+	Franchise            Franchise          `json:"franchise"`
+	Roster               Roster             `json:"roster"`
+	NextGameSchedule     Schedule           `json:"nextGameSchedule"`
+	PreviousGameSchedule Schedule           `json:"previousGameSchedule"`
+	ShortName            string             `json:"shortName"`
+	OfficialSiteURL      string             `json:"officialSiteUrl"`
+	FranchiseID          int                `json:"franchiseId"`
+	Active               bool               `json:"active"`
+}
+
+type teamStatsForType struct {
+	Type   StatType `json:"type"`
 	Splits []struct {
-		Stat TeamStats `json:"stat"`
-		Team Team      `json:"team"`
+		Stat *json.RawMessage `json:"stat"`
+		Team Team            `json:"team"`
 	} `json:"splits"`
+}
+
+type TeamStatsForType struct {
+	Type   StatType `json:"type"`
+	Splits []TeamStatsSplit `json:"splits"`
+}
+
+type TeamStatsSplit struct {
+	Stat interface{} `json:"stat"`
+	Team Team        `json:"team"`
 }
 
 type TeamStats struct {
@@ -92,15 +145,15 @@ type TeamStats struct {
 	Losses                 int     `json:"losses"`
 	Ot                     int     `json:"ot"`
 	Pts                    int     `json:"pts"`
-	PtPctg                 string  `json:"ptPctg"`
+	PtPctg                 float64 `json:"ptPctg,string"`
 	GoalsPerGame           float64 `json:"goalsPerGame"`
 	GoalsAgainstPerGame    float64 `json:"goalsAgainstPerGame"`
 	EvGGARatio             float64 `json:"evGGARatio"`
-	PowerPlayPercentage    string  `json:"powerPlayPercentage"`
+	PowerPlayPercentage    float64 `json:"powerPlayPercentage,string"`
 	PowerPlayGoals         float64 `json:"powerPlayGoals"`
 	PowerPlayGoalsAgainst  float64 `json:"powerPlayGoalsAgainst"`
 	PowerPlayOpportunities float64 `json:"powerPlayOpportunities"`
-	PenaltyKillPercentage  string  `json:"penaltyKillPercentage"`
+	PenaltyKillPercentage  float64 `json:"penaltyKillPercentage,string"`
 	ShotsPerGame           float64 `json:"shotsPerGame"`
 	ShotsAllowed           float64 `json:"shotsAllowed"`
 	WinScoreFirst          float64 `json:"winScoreFirst"`
@@ -112,9 +165,42 @@ type TeamStats struct {
 	FaceOffsTaken          float64 `json:"faceOffsTaken"`
 	FaceOffsWon            float64 `json:"faceOffsWon"`
 	FaceOffsLost           float64 `json:"faceOffsLost"`
-	FaceOffWinPercentage   string  `json:"faceOffWinPercentage"`
+	FaceOffWinPercentage   float64 `json:"faceOffWinPercentage,string"`
 	ShootingPctg           float64 `json:"shootingPctg"`
 	SavePctg               float64 `json:"savePctg"`
+}
+
+// TeamStatsRank are supposed to be received from the teams endpoint in the Splits array.
+// We will be ignoring this because it is merely the TeamStats struct but with the teams rank.
+type TeamStatsRank struct {
+	Wins                     string `json:"wins"`
+	Losses                   string `json:"losses"`
+	Ot                       string `json:"ot"`
+	Pts                      string `json:"pts"`
+	PtPctg                   string `json:"ptPctg"`
+	GoalsPerGame             string `json:"goalsPerGame"`
+	GoalsAgainstPerGame      string `json:"goalsAgainstPerGame"`
+	EvGGARatio               string `json:"evGGARatio"`
+	PowerPlayPercentage      string `json:"powerPlayPercentage"`
+	PowerPlayGoals           string `json:"powerPlayGoals"`
+	PowerPlayGoalsAgainst    string `json:"powerPlayGoalsAgainst"`
+	PowerPlayOpportunities   string `json:"powerPlayOpportunities"`
+	PenaltyKillOpportunities string `json:"penaltyKillOpportunities"`
+	PenaltyKillPercentage    string `json:"penaltyKillPercentage"`
+	ShotsPerGame             string `json:"shotsPerGame"`
+	ShotsAllowed             string `json:"shotsAllowed"`
+	WinScoreFirst            string `json:"winScoreFirst"`
+	WinOppScoreFirst         string `json:"winOppScoreFirst"`
+	WinLeadFirstPer          string `json:"winLeadFirstPer"`
+	WinLeadSecondPer         string `json:"winLeadSecondPer"`
+	WinOutshootOpp           string `json:"winOutshootOpp"`
+	WinOutshotByOpp          string `json:"winOutshotByOpp"`
+	FaceOffsTaken            string `json:"faceOffsTaken"`
+	FaceOffsWon              string `json:"faceOffsWon"`
+	FaceOffsLost             string `json:"faceOffsLost"`
+	FaceOffWinPercentage     string `json:"faceOffWinPercentage"`
+	SavePctRank              string `json:"savePctRank"`
+	ShootingPctRank          string `json:"shootingPctRank"`
 }
 
 type RosterPlayer struct {

@@ -28,12 +28,6 @@ func ConvertTimeToSeconds(timeString string) int {
 	return minutes * 60 + seconds
 }
 
-// IsPlayerGoalie checks if the given PlayerStats represents a Goalie.
-// True for Goalie, False for Skater
-func IsPlayerGoalie(stats PlayerStats) bool {
-	return stats.SavePercentage != nil
-}
-
 // expandQuery concatenates boolean flags to be used in HTTP queries.
 func expandQuery(endpoint string, toExpand map[string]bool) string {
 	expand := ""
