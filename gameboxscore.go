@@ -8,11 +8,10 @@ const endpointGameBoxscore = "/game/%d/boxscore"
 
 // GetGameBoxscore retrieves the boxscore from a specific NHL game.
 // Boxscore contains less information than GetGameLiveFeed.
-func (c *Client) GetGameBoxscore(id int) Boxscore {
+func (c *Client) GetGameBoxscore(id int) (Boxscore, int) {
 	var boxscore Boxscore
 	status := c.makeRequest(fmt.Sprintf(endpointGameBoxscore, id), nil, &boxscore)
-	fmt.Println(status)
-	return boxscore
+	return boxscore, status
 }
 
 // API endpoint

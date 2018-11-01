@@ -12,22 +12,23 @@ const endpointTeamStats = endpointTeam + "/stats"
 
 // GetTeams retrieves information about NHL teams based on TeamsParams.
 // If no parameters are passed, the current NHL teams with minimal information are retrieved.
-func (c *Client) GetTeams(params TeamsParams) []Team {
+// Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
+func (c *Client) GetTeams(params TeamsParams) ([]Team, int) {
 	var teams teams
 	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
-	fmt.Println(status)
-	return parseTeams(teams.Teams)
+	return parseTeams(teams.Teams), status
 }
 
-//TODO review this
-func (c *Client) GetTeam(params TeamsParams) Team {
+// GetTeam retrieves information about a single NHL team based on TeamsParams.
+// A team Id must be set.  If multiple Ids are set, only the first value is used.
+// Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
+func (c *Client) GetTeam(params TeamsParams) (Team, int) {
 	var teams teams
 	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
-	fmt.Println(status)
-	return parseTeams(teams.Teams)[0]
+	return parseTeams(teams.Teams)[0], status
 }
 
-func parseTeams (teams []team) []Team{
+func parseTeams (teams []team) []Team {
 	parsedTeams := make([]Team, len(teams))
 	for index, team := range teams {
 		parsedTeams[index].TeamStats = parseStats(team.TeamStats)
@@ -61,21 +62,20 @@ func parseStats (stats []teamStatsForType) []TeamStatsForType {
 
 // GetRoster retrieves the current roster of an NHL team using a team ID.
 // The same roster can be retrieved with the GetTeam(s) endpoints by using ShowTeamRoster() when building teamParams.
-func (c *Client) GetRoster(teamId int) Roster {
+func (c *Client) GetRoster(teamId int) (Roster, int) {
 	var roster Roster
 	status := c.makeRequest(fmt.Sprintf(endpointTeamRoster, teamId), nil, &roster)
-	fmt.Println(status)
-	return roster
+	return roster, status
 }
 
 //TODO Fix this, missing ranking stats
 // GetTeamStats retrieves the current stats of an NHL team using a team ID.
 // The same stats can be retrieved with the GetTeam(s) endpoints by using ShowTeamStats() when building teamParams.
-func (c *Client) GetTeamStats(teamId int) []TeamStatsForType {
+// Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
+func (c *Client) GetTeamStats(teamId int) ([]TeamStatsForType, int) {
 	var teamStats struct{ Stats []teamStatsForType `json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &teamStats)
-	fmt.Println(status)
-	return parseStats(teamStats.Stats)
+	return parseStats(teamStats.Stats), status
 }
 
 // API Endpoint
@@ -170,8 +170,6 @@ type TeamStats struct {
 	SavePctg               float64 `json:"savePctg"`
 }
 
-// TeamStatsRank are supposed to be received from the teams endpoint in the Splits array.
-// We will be ignoring this because it is merely the TeamStats struct but with the teams rank.
 type TeamStatsRank struct {
 	Wins                     string `json:"wins"`
 	Losses                   string `json:"losses"`

@@ -8,35 +8,31 @@ const endpointDraftProspects = endpointDrafts + "/prospects"
 const endpointDraftProspect = endpointDraftProspects + "/%d"
 
 // GetCurrentDraft retrieves information about the current NHL draft.
-func (c *Client) GetCurrentDraft() []Draft {
+func (c *Client) GetCurrentDraft() ([]Draft, int) {
 	var draft drafts
 	status := c.makeRequest(endpointDrafts, nil, &draft)
-	fmt.Println(status)
-	return draft.Drafts
+	return draft.Drafts, status
 }
 
 // GetDraft retrieves information about a NHL draft from a specific year.
-func (c *Client) GetDraft(year int) []Draft {
+func (c *Client) GetDraft(year int) ([]Draft, int) {
 	var draft drafts
 	status := c.makeRequest(fmt.Sprintf(endpointDraft, year), nil, &draft)
-	fmt.Println(status)
-	return draft.Drafts
+	return draft.Drafts, status
 }
 
 // GetProspects retrieves information about all NHL prospects (beware large response).
-func (c *Client) GetProspects() []Prospect {
+func (c *Client) GetProspects() ([]Prospect, int) {
 	var prospects prospects
 	status := c.makeRequest(endpointDraftProspects, nil, &prospects)
-	fmt.Println(status)
-	return prospects.Prospects
+	return prospects.Prospects, status
 }
 
 // GetProspect retrieves information about a single NHL prospect using a prospect id.
-func (c *Client) GetProspect(id int) Prospect {
+func (c *Client) GetProspect(id int) (Prospect, int) {
 	var prospects prospects
 	status := c.makeRequest(fmt.Sprintf(endpointDraftProspect, id), nil, &prospects)
-	fmt.Println(status)
-	return prospects.Prospects[0]
+	return prospects.Prospects[0], status
 }
 
 // API Endpoint

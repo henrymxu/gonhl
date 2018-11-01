@@ -9,11 +9,10 @@ const endpointGameLinescore = "/game/%d/linescore"
 
 // GetGameLinescore retrieves the linescore from a specific NHL game.
 // Linescore contains less information than GetGameBoxscore.
-func (c *Client) GetGameLinescore(id int) Linescore {
+func (c *Client) GetGameLinescore(id int) (Linescore, int) {
 	var linescore Linescore
 	status := c.makeRequest(fmt.Sprintf(endpointGameLinescore, id), nil, &linescore)
-	fmt.Println(status)
-	return linescore
+	return linescore, status
 }
 
 type Linescore struct {

@@ -1,7 +1,6 @@
 package gonhl
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -9,11 +8,10 @@ const endpointSchedule = "/schedule"
 
 // GetSchedule retrieves the NHL schedule based on ScheduleParams.
 // If no parameters are passed, the NHL schedule for the current day is retrieved.
-func (c *Client) GetSchedule(params *ScheduleParams) Schedule {
+func (c *Client) GetSchedule(params *ScheduleParams) (Schedule, int) {
 	var schedule Schedule
 	status := c.makeRequest(endpointSchedule, parseScheduleParams(params), &schedule)
-	fmt.Println(status)
-	return schedule
+	return schedule, status
 }
 
 //API endpoint

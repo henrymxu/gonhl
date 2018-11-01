@@ -11,22 +11,20 @@ const endpointGameLiveDiff = "/game/%d/feed/live/diffPatch"
 // GetGameLiveFeed retrieves the live feed from a specific NHL game.
 // LiveFeed contains all information from Boxscore and Linescore.
 // LiveFeed also contains play by play information
-func (c *Client) GetGameLiveFeed(id int) LiveFeed {
+func (c *Client) GetGameLiveFeed(id int) (LiveFeed, int) {
 	var live LiveFeed
 	status := c.makeRequest(fmt.Sprintf(endpointGameLive, id), nil, &live)
-	fmt.Println(status)
-	return live
+	return live, status
 }
 
 // GetGamePlays retrieves only the newest plays from a specific NHL game.
 // All plays after a certain time (not relative to game) are retrieved.
-func (c *Client) GetGamePlays(id int, time time.Time) Plays {
+func (c *Client) GetGamePlays(id int, time time.Time) (Plays, int) {
 	var live LiveFeed
 	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
 		"startTimecode": createTimeStamp(time),
 	}, &live)
-	fmt.Println(status)
-	return live.LiveData.Plays
+	return live.LiveData.Plays, status
 }
 
 type LiveFeed struct {

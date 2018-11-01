@@ -16,56 +16,50 @@ const endpointStandingTypes = "/standingsTypes"
 
 // GetStandings retrieves the NHL schedule based on StandingsParams.
 // If no parameters are passed, the current NHL standings are retrieved.
-func (c *Client) GetStandings(params *StandingsParams) []Standings {
+func (c *Client) GetStandings(params *StandingsParams) ([]Standings, int) {
 	var standings standings
 	endpointCall := endpointStandings
 	if params.standingsType != "" {
 		endpointCall = fmt.Sprintf(endpointStanding, params.standingsType)
 	}
 	status := c.makeRequest(endpointCall, parseStandingsParams(params), &standings)
-	fmt.Println(status)
-	return standings.Records
+	return standings.Records, status
 }
 
 // GetConferences retrieves information about the NHL conferences.
-func (c *Client) GetConferences() []Conference {
+func (c *Client) GetConferences() ([]Conference, int) {
 	var conferences conferences
 	status := c.makeRequest(endpointConferences, nil, &conferences)
-	fmt.Println(status)
-	return conferences.Conferences
+	return conferences.Conferences, status
 }
 
 // GetConference retrieves information about a specific NHL conference using a conference ID.
-func (c *Client) GetConference(id int) Conference {
+func (c *Client) GetConference(id int) (Conference, int) {
 	var conferences conferences
 	status := c.makeRequest(fmt.Sprintf(endpointConference, id), nil, &conferences)
-	fmt.Println(status)
-	return conferences.Conferences[0]
+	return conferences.Conferences[0], status
 }
 
 // GetDivisions retrieves information about the NHL divisions.
-func (c *Client) GetDivisions() []Division {
+func (c *Client) GetDivisions() ([]Division, int) {
 	var divisions divisions
 	status := c.makeRequest(endpointDivisions, nil, &divisions)
-	fmt.Println(status)
-	return divisions.Divisions
+	return divisions.Divisions, status
 }
 
 // GetDivision retreives information about a specific NHL division using a division ID.
-func (c *Client) GetDivision(id int) Division {
+func (c *Client) GetDivision(id int) (Division, int) {
 	var divisions divisions
 	status := c.makeRequest(fmt.Sprintf(endpointDivision, id), nil, &divisions)
-	fmt.Println(status)
-	return divisions.Divisions[0]
+	return divisions.Divisions[0], status
 }
 
 // GetStandingsTypes retrieves information about the various enums that can be used when retrieving NHL standings.
 // Pass values retrieved from here to SetStandingsType for StandingsParams.
-func (c *Client) GetStandingsTypes() []StandingsType {
+func (c *Client) GetStandingsTypes() ([]StandingsType, int) {
 	var standingsTypes []StandingsType
 	status := c.makeRequest(endpointStandingTypes, nil, &standingsTypes)
-	fmt.Println(status)
-	return standingsTypes
+	return standingsTypes, status
 }
 
 // API Endpoint (Each record represents a division)

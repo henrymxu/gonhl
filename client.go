@@ -45,7 +45,7 @@ func (c *Client) makeRequestWithoutJson(endpoint string, params map[string]strin
 		query.Add(key, value)
 	}
 	request.URL.RawQuery = query.Encode()
-	fmt.Println(request.URL)
+	//fmt.Println(request.URL)
 	response, _ := c.httpClient.Do(request)
 	//check(err)
 	defer response.Body.Close()

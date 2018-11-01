@@ -11,25 +11,23 @@ const endpointPlayerStats = "/people/%d/stats/"
 const endpointStatTypes = "/statTypes"
 
 // GetPlayer retrieves information about a single NHL player using a player ID.
-func (c *Client) GetPlayer(id int) Player {
+func (c *Client) GetPlayer(id int) (Player, int) {
 	var player struct{ People []Player `json:"people"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
-	fmt.Println(status)
-	return player.People[0]
+	return player.People[0], status
 }
 
 // GetPlayerStats retrieves stats about a single NHL player based on PlayerParams.
 // The PlayerParams must not be nil and all fields must be set (id, season, statType).
 // To determine if a skater or goalie is retrieved, use IsPlayerGoalie.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
-func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType) {
+func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType, int) {
 	var playerStats struct{ Stats []playerStatsForType `json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
-	fmt.Println(status)
 	parsedStats := make([]PlayerStatsForType, len(playerStats.Stats))
 	for statType, stat := range playerStats.Stats {
 		parsedStats[statType].Type = stat.Type
-		parsedStats[statType].Splits = make([]StatSplits, len(stat.Splits))
+		parsedStats[statType].Splits = make([]StatsSplit, len(stat.Splits))
 		for splitType, split := range stat.Splits {
 			switch stat.Type.DisplayName {
 			case "regularSeasonStatRankings":
@@ -69,22 +67,22 @@ func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType) {
 					parsedStats[statType].Splits[splitType].Stat = goalieStat
 				}
 			}
+			parsedStats[statType].Splits[splitType].internalStatsSplit = split.internalStatsSplit
 		}
 	}
-	return parsedStats
+	return parsedStats, status
 }
 
 // GetPlayerStatsTypes retrieves information about the various enums that can be used when retrieving player stats.
 // Pass values retrieved from here to SetStat for PlayerParams.
-func (c *Client) GetPlayerStatsTypes() []string {
+func (c *Client) GetPlayerStatsTypes() ([]string, int) {
 	var statTypes []StatType
 	status := c.makeRequest(endpointStatTypes, nil, &statTypes)
-	fmt.Println(status)
 	statTypesString := make([]string, len(statTypes))
 	for index, value := range statTypes {
 		statTypesString[index] = value.DisplayName
 	}
-	return statTypesString
+	return statTypesString, status
 }
 
 type Player struct {
@@ -122,37 +120,30 @@ type Position struct {
 type playerStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
-		Season             string              `json:"season"`
 		Stat               *json.RawMessage    `json:"stat"`
-		IsHome             *bool               `json:"isHome"`
-		IsWin              *bool               `json:"isWin"`
-		IsOT               *bool               `json:"isOT"`
-		Month              *int                `json:"month"`
-		Opponent           StatSplitIdentifier `json:"opponent"`
-		OpponentDivision   StatSplitIdentifier `json:"opponentDivision"`
-		OpponentConference StatSplitIdentifier `json:"opponentConference"`
+		internalStatsSplit
 	} `json:"splits"`
 }
 
 type PlayerStatsForType struct {
 	Type   StatType     `json:"type"`
-	Splits []StatSplits `json:"splits"`
+	Splits []StatsSplit `json:"splits"`
 }
 
-type StatSplits struct {
-	Season string      `json:"season"`
-	Stat   interface{} `json:"stat"`
-
-	IsHome *bool `json:"isHome"`
-
-	IsWin *bool `json:"isWin"`
-	IsOT  *bool `json:"isOT"`
-
-	Month *int `json:"month"`
-
+type internalStatsSplit struct {
+	Season             string              `json:"season"`
+	IsHome             *bool               `json:"isHome"`
+	IsWin              *bool               `json:"isWin"`
+	IsOT               *bool               `json:"isOT"`
+	Month              *int                `json:"month"`
 	Opponent           StatSplitIdentifier `json:"opponent"`
 	OpponentDivision   StatSplitIdentifier `json:"opponentDivision"`
 	OpponentConference StatSplitIdentifier `json:"opponentConference"`
+}
+
+type StatsSplit struct {
+	Stat   interface{} `json:"stat"`
+	internalStatsSplit
 }
 
 type StatSplitIdentifier struct {
