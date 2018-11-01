@@ -160,13 +160,14 @@ type StatType struct {
 	DisplayName string `json:"displayName"`
 }
 
+// PlayerStats holds values that are used in both SkaterStats and GoalieStats.
+// Only used as an anonymous struct.
 type PlayerStats struct {
 	TimeOnIce        string `json:"timeOnIce"`
 	Games            int    `json:"games"`
 	TimeOnIcePerGame string `json:"timeOnIcePerGame"`
 }
 
-// Position specific stats are pointers to differentiate between 0 value and nil value.
 type SkaterStats struct {
 	PlayerStats
 	Assists                     int     `json:"assists"`

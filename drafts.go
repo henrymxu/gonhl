@@ -46,17 +46,17 @@ type prospects struct {
 }
 
 type Draft struct {
-	DraftYear int     `json:"draftYear"`
-	Rounds    []Round `json:"rounds"`
+	DraftYear int          `json:"draftYear"`
+	Rounds    []DraftRound `json:"rounds"`
 }
 
-type Round struct {
-	RoundNumber int    `json:"roundNumber"`
-	Round       string `json:"round"`
-	Picks       []Pick `json:"picks"`
+type DraftRound struct {
+	RoundNumber int         `json:"roundNumber"`
+	Round       string      `json:"round"`
+	Picks       []DraftPick `json:"picks"`
 }
 
-type Pick struct {
+type DraftPick struct {
 	Year        int    `json:"year"`
 	Round       string `json:"round"`
 	PickOverall int    `json:"pickOverall"`
@@ -83,10 +83,10 @@ type Prospect struct {
 	ProspectCategory   ProspectCategory `json:"prospectCategory"`
 	AmateurTeam        Team             `json:"amateurTeam"`
 	AmateurLeague      League           `json:"amateurLeague"`
-	Ranks              Ranks            `json:"ranks"`
+	Ranks              ProspectRank     `json:"ranks"`
 }
 
-type Ranks struct {
+type ProspectRank struct {
 	Midterm   int `json:"midterm"`
 	FinalRank int `json:"finalRank"`
 	DraftYear int `json:"draftYear"`

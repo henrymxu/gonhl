@@ -16,15 +16,15 @@ func (c *Client) GetSchedule(params *ScheduleParams) (Schedule, int) {
 
 //API endpoint
 type Schedule struct {
-	TotalItems   int    `json:"totalItems"`
-	TotalEvents  int    `json:"totalEvents"`
-	TotalGames   int    `json:"totalGames"`
-	TotalMatches int    `json:"totalMatches"`
-	Wait         int    `json:"wait"`
-	Dates        []Date `json:"dates"`
+	TotalItems   int       `json:"totalItems"`
+	TotalEvents  int       `json:"totalEvents"`
+	TotalGames   int       `json:"totalGames"`
+	TotalMatches int       `json:"totalMatches"`
+	Wait         int       `json:"wait"`
+	Dates        []GameDay `json:"dates"`
 }
 
-type Date struct {
+type GameDay struct {
 	Date         string        `json:"date"`
 	TotalItems   int           `json:"totalItems"`
 	TotalEvents  int           `json:"totalEvents"`
@@ -36,12 +36,12 @@ type Date struct {
 }
 
 type Game struct {
-	GamePk   int       `json:"gamePk"`
-	Link     string    `json:"link"`
-	GameType string    `json:"gameType"`
-	Season   string    `json:"season"`
-	GameDate time.Time `json:"gameDate"`
-	Status   Status    `json:"status"`
+	GamePk   int        `json:"gamePk"`
+	Link     string     `json:"link"`
+	GameType string     `json:"gameType"`
+	Season   string     `json:"season"`
+	GameDate time.Time  `json:"gameDate"`
+	Status   GameStatus `json:"status"`
 	Teams    struct {
 		Away GameTeam `json:"away"`
 		Home GameTeam `json:"home"`
@@ -55,7 +55,7 @@ type Game struct {
 	Metadata        MetaData       `json:"metadata"`
 }
 
-type Status struct {
+type GameStatus struct {
 	AbstractGameState string `json:"abstractGameState"`
 	CodedGameState    string `json:"codedGameState"`
 	DetailedState     string `json:"detailedState"`

@@ -115,6 +115,7 @@ type MediaURLS struct {
 }
 
 type Token struct {
+	// Token 1
 	TokenGUID string `json:"tokenGUID"`
 	Type      string `json:"type"`
 	VideoID   string `json:"videoId"`

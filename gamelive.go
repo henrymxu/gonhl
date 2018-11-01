@@ -40,8 +40,8 @@ type LiveFeed struct {
 			DateTime    time.Time `json:"dateTime"`
 			EndDateTime time.Time `json:"endDateTime"`
 		} `json:"datetime"`
-		Status Status `json:"status"`
-		Teams struct {
+		Status GameStatus `json:"status"`
+		Teams  struct {
 			Away Team `json:"away"`
 			Home Team `json:"home"`
 		} `json:"teams"`
