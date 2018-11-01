@@ -21,6 +21,10 @@ func (c *Client) GetPlayer(id int) (Player, int) {
 // The PlayerParams must not be nil and all fields must be set (id, season, statType).
 // To determine if a skater or goalie is retrieved, use IsPlayerGoalie.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
+
+// internally this method takes the retrieved player stats json from the api, unmarshals them, then reinserts into the parent struct.
+// The parent struct holds an interface{} type and requires reflection to access the proper values of the stat.
+// The proper types can be converted to using ConvertPlayerStatsToSkaterStats and ConvertStatsToGoalieStats.
 func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType, int) {
 	var playerStats struct{ Stats []playerStatsForType `json:"stats"` }
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)

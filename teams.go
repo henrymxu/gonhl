@@ -28,6 +28,7 @@ func (c *Client) GetTeam(params TeamsParams) (Team, int) {
 	return parseTeams(teams.Teams)[0], status
 }
 
+// parseTeams replaces the team struct from the api and with the proper Team struct.
 func parseTeams (teams []team) []Team {
 	parsedTeams := make([]Team, len(teams))
 	for index, team := range teams {
@@ -37,6 +38,9 @@ func parseTeams (teams []team) []Team {
 	return parsedTeams
 }
 
+// parseStats takes the retrieved team stats json from the api, unmarshals them, then reinserts into the parent struct.
+// The parent struct holds an interface{} type and requires reflection to access the proper values of the stat.
+// The proper types can be converted to using ConvertTeamStatsToTeamStats and ConvertTeamStatsToTeamRanks.
 func parseStats (stats []teamStatsForType) []TeamStatsForType {
 	parsedStats := make([]TeamStatsForType, len(stats))
 	for statType, stat := range stats {
@@ -45,7 +49,7 @@ func parseStats (stats []teamStatsForType) []TeamStatsForType {
 			var testmap map[string]string
 			json.Unmarshal(*split.Stat, &testmap)
 			if _, ok := testmap["wins"]; ok {
-				var rankedStats TeamStatsRank
+				var rankedStats TeamStatRanks
 				json.Unmarshal(*split.Stat, &rankedStats)
 				parsedStats[statType].Splits[splitType].Stat = rankedStats
 			} else {
@@ -170,7 +174,7 @@ type TeamStats struct {
 	SavePctg               float64 `json:"savePctg"`
 }
 
-type TeamStatsRank struct {
+type TeamStatRanks struct {
 	Wins                     string `json:"wins"`
 	Losses                   string `json:"losses"`
 	Ot                       string `json:"ot"`

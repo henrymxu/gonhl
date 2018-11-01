@@ -9,6 +9,34 @@ import (
 
 const dateLayout = "2006-01-02"
 
+// ConvertPlayerStatsToSkaterStats attempts to cast an interface to the SkaterStats type.
+// This is used to access the stats nested in the StatsSplit type for players.
+func ConvertPlayerStatsToSkaterStats(stats interface{}) (SkaterStats, bool) {
+	skater, ok := stats.(SkaterStats)
+	return skater, ok
+}
+
+// ConvertPlayerStatsToGoalieStats attempts to cast an interface to the GoalieStats type.
+// This is used to access the stats nested in the StatsSplit type for players.
+func ConvertPlayerStatsToGoalieStats(stats interface{}) (GoalieStats, bool) {
+	goalie, ok := stats.(GoalieStats)
+	return goalie, ok
+}
+
+// ConvertTeamStatsToTeamStats attempts to cast an interface to the TeamStats type.
+// This is used to access the stats nested in the TeamStatsSplit type.
+func ConvertTeamStatsToTeamStats(stats interface{}) (TeamStats, bool) {
+	team, ok := stats.(TeamStats)
+	return team, ok
+}
+
+// ConvertTeamStatsToTeamRanks attempts to cast an interface to the TeamStatRanks type.
+// This is used to access the stats nested in the TeamStatsSplit type.
+func ConvertTeamStatsToTeamRanks(stats interface{}) (TeamStatRanks, bool) {
+	rank, ok := stats.(TeamStatRanks)
+	return rank, ok
+}
+
 // CreateDateFromString converts a string representing a date with format `yyyy-mm-dd` to a time.Time object.
 func CreateDateFromString(dateString string) (time.Time, error) {
 	return time.Parse(dateLayout, dateString)

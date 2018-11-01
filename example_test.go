@@ -41,8 +41,7 @@ func ExampleClient_GetPlayerStats_skater() {
 		SetSeason(2017)
 	player, _ := client.GetPlayerStats(playerParams)
 	fmt.Println(player[0].Type.DisplayName)
-
-	playerStat, _ := player[0].Splits[0].Stat.(gonhl.SkaterStats)
+	playerStat, _ := gonhl.ConvertPlayerStatsToSkaterStats(player[0].Splits[0].Stat)
 	fmt.Println(player[0].Splits[0].Season)
 	fmt.Println(playerStat.Points)
 	// Output:
@@ -61,7 +60,7 @@ func ExampleClient_GetPlayerStats_goalie() {
 		SetSeason(2018)
 	player, _ := client.GetPlayerStats(playerParams)
 	fmt.Println(player[0].Type.DisplayName)
-	playerStat, _ := player[0].Splits[0].Stat.(gonhl.GoalieStats)
+	playerStat, _ := gonhl.ConvertPlayerStatsToGoalieStats(player[0].Splits[0].Stat)
 	fmt.Println(playerStat.SavePercentage > 0)
 	fmt.Println(playerStat.Saves > 0)
 	// Output:
@@ -82,9 +81,9 @@ func ExampleClient_GetTeams() {
 	fmt.Println(teams[0].Name)
 	fmt.Println(teams[0].TeamStats[0].Type.DisplayName)
 	fmt.Println(teams[0].Roster.Link)
-	teamStat, _ := teams[0].TeamStats[0].Splits[0].Stat.(gonhl.TeamStats)
+	teamStat, _ := gonhl.ConvertTeamStatsToTeamStats(teams[0].TeamStats[0].Splits[0].Stat)
 	fmt.Println(teamStat.GamesPlayed > 0)
-	rankedStat, _ := teams[0].TeamStats[0].Splits[1].Stat.(gonhl.TeamStatsRank)
+	rankedStat, _ := gonhl.ConvertTeamStatsToTeamRanks(teams[0].TeamStats[0].Splits[1].Stat)
 	fmt.Println(rankedStat.Wins != "")
 	// Output:
 	// New Jersey Devils
