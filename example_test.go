@@ -109,6 +109,24 @@ func ExampleClient_GetTeam() {
 	// Output: New York Islanders
 }
 
+func ExampleClient_GetTeamStats() {
+	client := gonhl.NewClient()
+	teamStats, _ := client.GetTeamStats(1)
+	fmt.Println(teamStats[0].Splits[0].Team.ID)
+	fmt.Println(teamStats[0].Type.DisplayName)
+	stats, _ := teamStats[0].Splits[0].Stat.(gonhl.TeamStats)
+	fmt.Println(stats.Wins > 0)
+	fmt.Println(teamStats[1].Type.DisplayName)
+	ranks, _ := teamStats[1].Splits[0].Stat.(gonhl.TeamStatRanks)
+	fmt.Println(ranks.Wins != "")
+	// Output:
+	// 1
+	// statsSingleSeason
+	// true
+	// regularSeasonStatRankings
+	// true
+}
+
 // Example of retrieving a prospect.
 // Prospect information for Connor McDavid.
 func ExampleClient_GetProspect() {

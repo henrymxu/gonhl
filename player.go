@@ -30,6 +30,7 @@ func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType, int
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
 	parsedStats := make([]PlayerStatsForType, len(playerStats.Stats))
 	for statType, stat := range playerStats.Stats {
+		parsedStats[statType].ID = params.id
 		parsedStats[statType].Type = stat.Type
 		parsedStats[statType].Splits = make([]StatsSplit, len(stat.Splits))
 		for splitType, split := range stat.Splits {
@@ -124,12 +125,13 @@ type Position struct {
 type playerStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
-		Stat               *json.RawMessage    `json:"stat"`
+		Stat *json.RawMessage `json:"stat"`
 		internalStatsSplit
 	} `json:"splits"`
 }
 
 type PlayerStatsForType struct {
+	ID     int
 	Type   StatType     `json:"type"`
 	Splits []StatsSplit `json:"splits"`
 }
@@ -146,7 +148,7 @@ type internalStatsSplit struct {
 }
 
 type StatsSplit struct {
-	Stat   interface{} `json:"stat"`
+	Stat interface{} `json:"stat"`
 	internalStatsSplit
 }
 
