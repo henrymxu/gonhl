@@ -84,7 +84,7 @@ func (c *Client) GetTeamStats(teamId int) ([]TeamStatsForType, int) {
 
 // API Endpoint
 type teams struct {
-	Teams []team `json:"teams,omitempty"`
+	Teams []team `json:"teams"`
 }
 
 // API Endpoint
@@ -112,7 +112,7 @@ type internalTeam struct {
 	TriCode              string             `json:"triCode"`
 	TeamName             string             `json:"teamName"`
 	LocationName         string             `json:"locationName"`
-	FirstYearOfPlay      string             `json:"firstYearOfPlay,omitempty"`
+	FirstYearOfPlay      string             `json:"firstYearOfPlay"`
 	Division             Division           `json:"division"`
 	Conference           Conference         `json:"conference"`
 	Franchise            Franchise          `json:"franchise"`
@@ -125,17 +125,17 @@ type internalTeam struct {
 	Active               bool               `json:"active"`
 }
 
+type TeamStatsForType struct {
+	Type   StatType `json:"type"`
+	Splits []TeamStatsSplit `json:"splits"`
+}
+
 type teamStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
 		Stat *json.RawMessage `json:"stat"`
 		Team Team            `json:"team"`
 	} `json:"splits"`
-}
-
-type TeamStatsForType struct {
-	Type   StatType `json:"type"`
-	Splits []TeamStatsSplit `json:"splits"`
 }
 
 type TeamStatsSplit struct {

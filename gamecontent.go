@@ -155,9 +155,9 @@ type Contributor struct {
 
 type Epg struct {
 	Title     string    `json:"title"`
-	Platform  string    `json:"platform,omitempty"`
+	Platform  string    `json:"platform"`
 	Items     []EpgItem `json:"items"`
-	TopicList string    `json:"topicList,omitempty"`
+	TopicList string    `json:"topicList"`
 }
 
 type EpgItem struct {

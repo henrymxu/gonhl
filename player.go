@@ -22,7 +22,7 @@ func (c *Client) GetPlayer(id int) (Player, int) {
 // To determine if a skater or goalie is retrieved, use IsPlayerGoalie.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
 
-// internally this method takes the retrieved player stats json from the api, unmarshals them, then reinserts into the parent struct.
+// Internally this method takes the retrieved player stats json from the api, unmarshals them, then reinserts into the parent struct.
 // The parent struct holds an interface{} type and requires reflection to access the proper values of the stat.
 // The proper types can be converted to using ConvertPlayerStatsToSkaterStats and ConvertStatsToGoalieStats.
 func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType, int) {
@@ -122,18 +122,18 @@ type Position struct {
 	Abbreviation string `json:"abbreviation"`
 }
 
+type PlayerStatsForType struct {
+	ID     int
+	Type   StatType     `json:"type"`
+	Splits []StatsSplit `json:"splits"`
+}
+
 type playerStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
 		Stat *json.RawMessage `json:"stat"`
 		internalStatsSplit
 	} `json:"splits"`
-}
-
-type PlayerStatsForType struct {
-	ID     int
-	Type   StatType     `json:"type"`
-	Splits []StatsSplit `json:"splits"`
 }
 
 type internalStatsSplit struct {
@@ -253,6 +253,8 @@ type GoalieStatsByRank struct {
 	Wins                string `json:"wins"`
 }
 
+// GoalsBySituation holds all the relevant information for goalies
+// and most information for skaters.
 type GoalsBySituation struct {
 	GoalsInFirstPeriod       int `json:"goalsInFirstPeriod"`
 	GoalsInSecondPeriod      int `json:"goalsInSecondPeriod"`

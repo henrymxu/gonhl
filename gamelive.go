@@ -78,14 +78,14 @@ type Play struct {
 	Players []struct {
 		Player     Player `json:"player"`
 		PlayerType string `json:"playerType"`
-	} `json:"players,omitempty"`
+	} `json:"players"`
 	Result      Result `json:"result"`
 	About       About  `json:"about"`
 	Coordinates struct {
 		X int `json:"x"`
 		Y int `json:"y"`
 	} `json:"coordinates"`
-	Team Team `json:"team,omitempty"`
+	Team Team `json:"team"`
 }
 
 type Decisions struct {

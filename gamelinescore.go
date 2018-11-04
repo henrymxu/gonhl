@@ -37,7 +37,7 @@ type Linescore struct {
 type Period struct {
 	PeriodType string         `json:"periodType"`
 	StartTime  time.Time      `json:"startTime"`
-	EndTime    time.Time      `json:"endTime,omitempty"`
+	EndTime    time.Time      `json:"endTime"`
 	Num        int            `json:"num"`
 	OrdinalNum string         `json:"ordinalNum"`
 	Home       PeriodTeamData `json:"home"`
