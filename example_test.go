@@ -38,7 +38,7 @@ func ExampleClient_GetPlayer() {
 	client := gonhl.NewClient()
 	player, _ := client.GetPlayer(8478402)
 	fmt.Println(player.FullName)
-	fmt.Println(player.Height)
+	fmt.Println(player.Height.Format())
 	fmt.Println(player.Weight)
 	fmt.Println(player.BirthDate.Format("2006-01-02"))
 	// Output:

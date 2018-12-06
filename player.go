@@ -103,7 +103,7 @@ type Player struct {
 	BirthStateProvince string        `json:"birthStateProvince"`
 	BirthCountry       string        `json:"birthCountry"`
 	Nationality        string        `json:"nationality"`
-	Height             string        `json:"height"`
+	Height             Height        `json:"height,string"`
 	Weight             int           `json:"weight"`
 	Active             bool          `json:"active"`
 	AlternateCaptain   bool          `json:"alternateCaptain"`
