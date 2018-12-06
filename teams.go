@@ -13,18 +13,18 @@ const endpointTeamStats = endpointTeam + "/stats"
 // GetTeams retrieves information about NHL teams based on TeamsParams.
 // If no parameters are passed, the current NHL teams with minimal information are retrieved.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
-func (c *Client) GetTeams(params TeamsParams) ([]Team, int) {
+func (c *Client) GetTeams(params *TeamsParams) ([]Team, int) {
 	var teams teams
-	status := c.makeRequest(endpointTeams, parseTeamsParams(params), &teams)
+	status := c.makeRequest(endpointTeams, parseTeamsParams(*params), &teams)
 	return parseTeams(teams.Teams), status
 }
 
 // GetTeam retrieves information about a single NHL team based on TeamsParams.
 // A team Id must be set.  If multiple Ids are set, only the first value is used.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
-func (c *Client) GetTeam(params TeamsParams) (Team, int) {
+func (c *Client) GetTeam(params *TeamsParams) (Team, int) {
 	var teams teams
-	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(params), &teams)
+	status := c.makeRequest(fmt.Sprintf(endpointTeam, params.ids[0]), parseTeamsParams(*params), &teams)
 	return parseTeams(teams.Teams)[0], status
 }
 
@@ -207,7 +207,7 @@ type TeamStatRanks struct {
 
 type RosterPlayer struct {
 	Person       Player   `json:"person"`
-	JerseyNumber string   `json:"jerseyNumber"`
+	JerseyNumber int   `json:"jerseyNumber,string"`
 	Position     Position `json:"position"`
 }
 

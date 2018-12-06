@@ -17,15 +17,15 @@ func parseStandingsParams(params *StandingsParams) map[string]string {
 	if params.season != -1 {
 		query["season"] = createSeasonString(params.season)
 	}
-	if &params.date != nil {
-		query["date"] = CreateStringFromDate(params.date)
+	if params.date != nil {
+		query["date"] = CreateStringFromDate(*params.date)
 	}
 	return query
 }
 
 type StandingsParams struct {
 	season        int
-	date          time.Time
+	date          *time.Time
 	record        bool
 	standingsType string
 }
@@ -48,7 +48,7 @@ func (sp *StandingsParams) SetSeason(season int) *StandingsParams {
 // SetDate specifies which date to use in response.
 // The response will represent the standings on that date.
 func (sp *StandingsParams) SetDate(date time.Time) *StandingsParams {
-	sp.date = date
+	sp.date = &date
 	return sp
 }
 

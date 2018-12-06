@@ -57,9 +57,9 @@ type Game struct {
 
 type GameStatus struct {
 	AbstractGameState string `json:"abstractGameState"`
-	CodedGameState    string `json:"codedGameState"`
+	CodedGameState    int    `json:"codedGameState,string"`
 	DetailedState     string `json:"detailedState"`
-	StatusCode        string `json:"statusCode"`
+	StatusCode        int    `json:"statusCode,string"`
 	StartTimeTBD      bool   `json:"startTimeTBD"`
 }
 

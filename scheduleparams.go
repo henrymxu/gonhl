@@ -1,6 +1,8 @@
 package gonhl
 
-import "time"
+import (
+	"time"
+)
 
 func NewScheduleParams() *ScheduleParams {
 	return &ScheduleParams{
@@ -19,11 +21,11 @@ func parseScheduleParams(params *ScheduleParams) map[string]string {
 	if params.teamId != -1 {
 		query["teamId"] = string(params.teamId)
 	}
-	if &params.date != nil {
-		query["date"] = CreateStringFromDate(params.date)
-	} else if &params.startDate != nil {
-		query["startDate"] = CreateStringFromDate(params.startDate)
-		query["endDate"] = CreateStringFromDate(params.endDate)
+	if params.date != nil {
+		query["date"] = CreateStringFromDate(*params.date)
+	} else if params.startDate != nil {
+		query["startDate"] = CreateStringFromDate(*params.startDate)
+		query["endDate"] = CreateStringFromDate(*params.endDate)
 	}
 	return query
 }
@@ -33,9 +35,9 @@ type ScheduleParams struct {
 	linescore  bool
 	ticket     bool
 	teamId     int
-	date       time.Time
-	startDate  time.Time
-	endDate    time.Time
+	date       *time.Time
+	startDate  *time.Time
+	endDate    *time.Time
 }
 
 // ShowBroadcasts makes response include the broadcasts for games.
@@ -68,10 +70,10 @@ func (sp *ScheduleParams) SetTeamId(teamId int) *ScheduleParams {
 // Providing multiple dates will return the schedule for dates starting from the 1st date to the 2nd date.
 func (sp *ScheduleParams) SetDate(date ...time.Time) *ScheduleParams {
 	if len(date) == 1 {
-		sp.date = date[0]
+		sp.date = &date[0]
 	} else {
-		sp.startDate = date[0]
-		sp.endDate = date[1]
+		sp.startDate = &date[0]
+		sp.endDate = &date[1]
 	}
 	return sp
 }

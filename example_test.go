@@ -3,6 +3,7 @@ package gonhl_test
 import (
 	"fmt"
 	"github.com/henrymxu/gonhl"
+	"time"
 )
 
 func ExampleNewClient() {
@@ -29,6 +30,22 @@ func ExampleClient_GetDraft() {
 	draft, _ := client.GetDraft(2018)
 	fmt.Println(draft[0].DraftYear)
 	// Output: 2018
+}
+
+// Example of retrieving Player information.
+// Information about Connor McDavid.
+func ExampleClient_GetPlayer() {
+	client := gonhl.NewClient()
+	player, _ := client.GetPlayer(8478402)
+	fmt.Println(player.FullName)
+	fmt.Println(player.Height)
+	fmt.Println(player.Weight)
+	fmt.Println(player.BirthDate.Format("2006-01-02"))
+	// Output:
+	// Connor McDavid
+	// 6' 1"
+	// 193
+	// 1997-01-13
 }
 
 // Example of retrieving Skater Stats.
@@ -77,7 +94,7 @@ func ExampleClient_GetTeams() {
 		ShowDetailedRoster().
 		ShowTeamStats().
 		SetTeamIds(1, 2, 3)
-	teams, _ := client.GetTeams(*teamsParams)
+	teams, _ := client.GetTeams(teamsParams)
 	fmt.Println(teams[0].Name)
 	fmt.Println(teams[0].TeamStats[0].Type.DisplayName)
 	fmt.Println(teams[0].Roster.Link)
@@ -104,7 +121,7 @@ func ExampleClient_GetTeam() {
 		ShowSchedulePrev().
 		ShowTeamStats().
 		SetTeamIds(2)
-	team, _ := client.GetTeam(*teamsParams)
+	team, _ := client.GetTeam(teamsParams)
 	fmt.Println(team.Name)
 	// Output: New York Islanders
 }
@@ -134,4 +151,16 @@ func ExampleClient_GetProspect() {
 	prospect, _ := client.GetProspect(54223)
 	fmt.Println(prospect.FullName)
 	// Output: Connor Mcdavid
+}
+
+// Example of retrieving a schedule.
+// Be careful of dates as they may not be the same timezone.
+func ExampleClient_GetSchedule() {
+	client := gonhl.NewClient()
+	date, _ := time.Parse("2006-01-02", "2018-12-04")
+	scheduleParams := gonhl.NewScheduleParams().SetDate(date)
+	schedule, _ := client.GetSchedule(scheduleParams)
+	fmt.Println(schedule.Dates[0].Games[0].GameDate.Format("2006-01-02"))
+	// Output:
+	// 2018-12-05
 }
