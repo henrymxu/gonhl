@@ -25,7 +25,7 @@ type Schedule struct {
 }
 
 type GameDay struct {
-	Date         string        `json:"date"`
+	Date         JsonBirthDate `json:"date"`
 	TotalItems   int           `json:"totalItems"`
 	TotalEvents  int           `json:"totalEvents"`
 	TotalGames   int           `json:"totalGames"`

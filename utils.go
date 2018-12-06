@@ -1,12 +1,15 @@
 package gonhl
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 )
 
+// Type alias for yyyy-mm-dd formatting
+type JsonBirthDate time.Time
 const dateLayout = "2006-01-02"
 
 // ConvertPlayerStatsToSkaterStats attempts to cast an interface to the SkaterStats type.
@@ -54,6 +57,26 @@ func ConvertTimeToSeconds(timeString string) int {
 	minutes, _ := strconv.Atoi(parts[0])
 	seconds, _ := strconv.Atoi(parts[1])
 	return minutes * 60 + seconds
+}
+
+func (j *JsonBirthDate) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), "\"")
+	t, err := CreateDateFromString(s)
+	if err != nil {
+		return err
+	}
+	*j = JsonBirthDate(t)
+	return nil
+}
+
+func (j JsonBirthDate) MarshalJSON() ([]byte, error) {
+	return json.Marshal(j)
+}
+
+// Format function for printing type alias date.
+func (j JsonBirthDate) Format(s string) string {
+	t := time.Time(j)
+	return t.Format(s)
 }
 
 // expandQuery concatenates boolean flags to be used in HTTP queries.

@@ -158,9 +158,22 @@ func ExampleClient_GetProspect() {
 func ExampleClient_GetSchedule() {
 	client := gonhl.NewClient()
 	date, _ := time.Parse("2006-01-02", "2018-12-04")
-	scheduleParams := gonhl.NewScheduleParams().SetDate(date)
+	scheduleParams := gonhl.NewScheduleParams().
+		SetDate(date).ShowTicketRetailers()
 	schedule, _ := client.GetSchedule(scheduleParams)
 	fmt.Println(schedule.Dates[0].Games[0].GameDate.Format("2006-01-02"))
+	fmt.Println(schedule.Dates[0].Date.Format("2006-01-02"))
+	fmt.Println(schedule.Dates[0].Games[0].Venue.Name)
+	fmt.Println(schedule.Dates[0].Games[0].Teams.Home.Score)
+	fmt.Println(schedule.Dates[0].Games[0].Teams.Away.Score)
+	fmt.Println(len(schedule.Dates[0].Games[0].Tickets))
+	fmt.Println(len(schedule.Dates[0].Games[0].Broadcasts))
 	// Output:
 	// 2018-12-05
+	// 2018-12-04
+	// BB&T Center
+	// 5
+	// Boston Bruins
+	// 23
+	// 0
 }
