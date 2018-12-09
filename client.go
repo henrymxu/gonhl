@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-//TODO consider adding to json fields -> ,omitempty"`
-
 const baseAddress = "http://statsapi.web.nhl.com/api/v1/"
 
 // A Client is required for api calls

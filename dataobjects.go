@@ -30,7 +30,7 @@ func (j *JsonBirthDate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j)
 }
 
-// Format function for printing type alias date.
+// Format function for printing.
 func (j *JsonBirthDate) Format(s string) string {
 	t := time.Time(*j)
 	return t.Format(s)
