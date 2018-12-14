@@ -60,7 +60,7 @@ func testTeams(client *gonhl.Client) {
 		ShowScheduleNext().
 		ShowSchedulePrev().
 		ShowTeamStats()
-	teams, _ := client.GetTeams(*teamsParams)
+	teams, _ := client.GetTeams(teamsParams)
 	fmt.Println(teams)
 }
 
