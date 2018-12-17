@@ -36,6 +36,7 @@ func (j *JsonDate) Format(s string) string {
 	return t.Format(s)
 }
 
+// Default string function (yyyy-mm-dd)
 func (j JsonDate) String() string {
 	return j.Format("2016-01-02")
 }

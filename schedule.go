@@ -17,6 +17,8 @@ func (c *Client) GetSchedule(params *ScheduleParams) (Schedule, int) {
 	return schedule, status
 }
 
+// Create a neatly formatted string for a schedule.
+// The strings for each game for each day of the schedule are included.
 func (s Schedule) String() string {
 	var sb strings.Builder
 	for _, date := range s.Dates {
@@ -28,8 +30,10 @@ func (s Schedule) String() string {
 	return sb.String()
 }
 
+// Create a neatly formatted string for a game.
+// Not all information is included, key information included are: status, start time, teams, and id.
 func (g Game) String() string {
-	return fmt.Sprintf("%s: %s -> %s vs %s: %d", g.Status.DetailedState, g.GameDate.Format("3:04PM MST"), g.Teams.Home.Team.Name, g.Teams.Away.Team.Name, g.GamePk)
+	return fmt.Sprintf("%s: %s -> %s(H) vs %s(A) | %d:%d -> %d", g.Status.DetailedState, g.GameDate.Format("3:04PM MST"), g.Teams.Home.Team.Name, g.Teams.Away.Team.Name, g.Teams.Home.Score, g.Teams.Away.Score, g.GamePk)
 }
 
 //API endpoint
