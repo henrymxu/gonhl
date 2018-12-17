@@ -17,19 +17,19 @@ func (c *Client) GetSchedule(params *ScheduleParams) (Schedule, int) {
 	return schedule, status
 }
 
-func (s *Schedule) String() string {
+func (s Schedule) String() string {
 	var sb strings.Builder
 	for _, date := range s.Dates {
 		sb.WriteString(fmt.Sprintf("Date: %s\n", date.Date.Format("2016-01-02")))
 		for _, game := range date.Games {
-			sb.WriteString(fmt.Sprint(game))
+			sb.WriteString(fmt.Sprintf("%s\n", game))
 		}
 	}
 	return sb.String()
 }
 
-func (g *Game) String() string {
-	return fmt.Sprintf("%s: %s -> %s vs %s: %d\n", g.Status.DetailedState, g.GameDate.Format("3:04PM MST"), g.Teams.Home.Team.Name, g.Teams.Away.Team.Name, g.GamePk)
+func (g Game) String() string {
+	return fmt.Sprintf("%s: %s -> %s vs %s: %d", g.Status.DetailedState, g.GameDate.Format("3:04PM MST"), g.Teams.Home.Team.Name, g.Teams.Away.Team.Name, g.GamePk)
 }
 
 //API endpoint
