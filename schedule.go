@@ -1,17 +1,35 @@
 package gonhl
 
 import (
+	"fmt"
+	"strings"
 	"time"
 )
 
 const endpointSchedule = "/schedule"
 
 // GetSchedule retrieves the NHL schedule based on ScheduleParams.
-// If no parameters are passed, the NHL schedule for the current day is retrieved.
+// If no parameters are passed, the NHL schedule for the current^ day is retrieved.
+// ^ This may not be true, seems like sometimes the previous day schedule is returned, safest option is to pass a time.
 func (c *Client) GetSchedule(params *ScheduleParams) (Schedule, int) {
 	var schedule Schedule
 	status := c.makeRequest(endpointSchedule, parseScheduleParams(params), &schedule)
 	return schedule, status
+}
+
+func (s *Schedule) String() string {
+	var sb strings.Builder
+	for _, date := range s.Dates {
+		sb.WriteString(fmt.Sprintf("Date: %s\n", date.Date.Format("2016-01-02")))
+		for _, game := range date.Games {
+			sb.WriteString(fmt.Sprint(game))
+		}
+	}
+	return sb.String()
+}
+
+func (g *Game) String() string {
+	return fmt.Sprintf("%s: %s -> %s vs %s: %d\n", g.Status.DetailedState, g.GameDate.Format("3:04PM MST"), g.Teams.Home.Team.Name, g.Teams.Away.Team.Name, g.GamePk)
 }
 
 //API endpoint
@@ -25,7 +43,7 @@ type Schedule struct {
 }
 
 type GameDay struct {
-	Date         JsonBirthDate `json:"date"`
+	Date         JsonDate      `json:"date"`
 	TotalItems   int           `json:"totalItems"`
 	TotalEvents  int           `json:"totalEvents"`
 	TotalGames   int           `json:"totalGames"`

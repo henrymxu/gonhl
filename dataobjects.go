@@ -9,31 +9,35 @@ import (
 )
 
 // Type alias for yyyy-mm-dd formatting
-type JsonBirthDate time.Time
+type JsonDate time.Time
 
 type Height struct {
 	Feet int
 	Inches int
 }
 
-func (j *JsonBirthDate) UnmarshalJSON(b []byte) error {
+func (j *JsonDate) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
 	t, err := CreateDateFromString(s)
 	if err != nil {
 		return err
 	}
-	*j = JsonBirthDate(t)
+	*j = JsonDate(t)
 	return nil
 }
 
-func (j *JsonBirthDate) MarshalJSON() ([]byte, error) {
+func (j *JsonDate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(j)
 }
 
 // Format function for printing.
-func (j *JsonBirthDate) Format(s string) string {
+func (j *JsonDate) Format(s string) string {
 	t := time.Time(*j)
 	return t.Format(s)
+}
+
+func (j *JsonDate) String() string {
+	return j.Format("2016-01-02")
 }
 
 func (h *Height) UnmarshalJSON(b []byte) error {

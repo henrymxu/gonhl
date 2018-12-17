@@ -91,22 +91,22 @@ func (c *Client) GetPlayerStatsTypes() ([]string, int) {
 }
 
 type Player struct {
-	ID                 int           `json:"id"`
-	FullName           string        `json:"fullName"`
-	Link               string        `json:"link"`
-	FirstName          string        `json:"firstName"`
-	LastName           string        `json:"lastName"`
-	PrimaryNumber      int           `json:"primaryNumber,string"`
-	BirthDate          JsonBirthDate `json:"birthDate"`
-	CurrentAge         int           `json:"currentAge"`
-	BirthCity          string        `json:"birthCity"`
-	BirthStateProvince string        `json:"birthStateProvince"`
-	BirthCountry       string        `json:"birthCountry"`
-	Nationality        string        `json:"nationality"`
-	Height             Height        `json:"height,string"`
-	Weight             int           `json:"weight"`
-	Active             bool          `json:"active"`
-	AlternateCaptain   bool          `json:"alternateCaptain"`
+	ID                 int      `json:"id"`
+	FullName           string   `json:"fullName"`
+	Link               string   `json:"link"`
+	FirstName          string   `json:"firstName"`
+	LastName           string   `json:"lastName"`
+	PrimaryNumber      int      `json:"primaryNumber,string"`
+	BirthDate          JsonDate `json:"birthDate"`
+	CurrentAge         int      `json:"currentAge"`
+	BirthCity          string   `json:"birthCity"`
+	BirthStateProvince string   `json:"birthStateProvince"`
+	BirthCountry       string   `json:"birthCountry"`
+	Nationality        string   `json:"nationality"`
+	Height             Height   `json:"height,string"`
+	Weight             int      `json:"weight"`
+	Active             bool     `json:"active"`
+	AlternateCaptain   bool     `json:"alternateCaptain"`
 	Captain            bool          `json:"captain"`
 	Rookie             bool          `json:"rookie"`
 	ShootsCatches      string        `json:"shootsCatches"`
