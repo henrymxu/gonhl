@@ -9,10 +9,10 @@ func NewTeamsParams() *TeamsParams {
 func parseTeamsParams(params TeamsParams) map[string]string {
 	query := map[string]string{}
 	expand := expandQuery("team", map[string]bool{
-		"roster":       params.roster,
-		"schedule.next": params.scheduleNext,
+		"roster":            params.roster,
+		"schedule.next":     params.scheduleNext,
 		"schedule.previous": params.schedulePrev,
-		"stats":        params.stats,
+		"stats":             params.stats,
 	})
 	query["expand"] = expand
 	if params.season != -1 {

@@ -29,7 +29,7 @@ func (c *Client) GetTeam(params *TeamsParams) (Team, int) {
 }
 
 // parseTeams replaces the team struct from the api and with the proper Team struct.
-func parseTeams (teams []team) []Team {
+func parseTeams(teams []team) []Team {
 	parsedTeams := make([]Team, len(teams))
 	for index, team := range teams {
 		parsedTeams[index].TeamStats = parseStats(team.TeamStats)
@@ -41,7 +41,7 @@ func parseTeams (teams []team) []Team {
 // parseStats takes the retrieved team stats json from the api, unmarshals them, then reinserts into the parent struct.
 // The parent struct holds an interface{} type and requires reflection to access the proper values of the stat.
 // The proper types can be converted to using ConvertTeamStatsToTeamStats and ConvertTeamStatsToTeamRanks.
-func parseStats (stats []teamStatsForType) []TeamStatsForType {
+func parseStats(stats []teamStatsForType) []TeamStatsForType {
 	parsedStats := make([]TeamStatsForType, len(stats))
 	for statType, stat := range stats {
 		parsedStats[statType].Splits = make([]TeamStatsSplit, len(stat.Splits))
@@ -77,7 +77,9 @@ func (c *Client) GetRoster(teamId int) (Roster, int) {
 // The same stats can be retrieved with the GetTeam(s) endpoints by using ShowTeamStats() when building teamParams.
 // Stats must be casted to appropriate type.  Types can be determined using the DisplayName.
 func (c *Client) GetTeamStats(teamId int) ([]TeamStatsForType, int) {
-	var teamStats struct{ Stats []teamStatsForType `json:"stats"` }
+	var teamStats struct {
+		Stats []teamStatsForType `json:"stats"`
+	}
 	status := c.makeRequest(fmt.Sprintf(endpointTeamStats, teamId), nil, &teamStats)
 	return parseStats(teamStats.Stats), status
 }
@@ -94,39 +96,39 @@ type Roster struct {
 }
 
 type team struct {
-	TeamStats            []teamStatsForType `json:"teamStats"`
+	TeamStats []teamStatsForType `json:"teamStats"`
 	internalTeam
 }
 
 type Team struct {
-	TeamStats            []TeamStatsForType `json:"teamStats"`
+	TeamStats []TeamStatsForType `json:"teamStats"`
 	internalTeam
 }
 
 type internalTeam struct {
-	ID                   int                `json:"id"`
-	Name                 string             `json:"name"`
-	Link                 string             `json:"link"`
-	Venue                Venue              `json:"venue"`
-	Abbreviation         string             `json:"abbreviation"`
-	TriCode              string             `json:"triCode"`
-	TeamName             string             `json:"teamName"`
-	LocationName         string             `json:"locationName"`
-	FirstYearOfPlay      string             `json:"firstYearOfPlay"`
-	Division             Division           `json:"division"`
-	Conference           Conference         `json:"conference"`
-	Franchise            Franchise          `json:"franchise"`
-	Roster               Roster             `json:"roster"`
-	NextGameSchedule     Schedule           `json:"nextGameSchedule"`
-	PreviousGameSchedule Schedule           `json:"previousGameSchedule"`
-	ShortName            string             `json:"shortName"`
-	OfficialSiteURL      string             `json:"officialSiteUrl"`
-	FranchiseID          int                `json:"franchiseId"`
-	Active               bool               `json:"active"`
+	ID                   int        `json:"id"`
+	Name                 string     `json:"name"`
+	Link                 string     `json:"link"`
+	Venue                Venue      `json:"venue"`
+	Abbreviation         string     `json:"abbreviation"`
+	TriCode              string     `json:"triCode"`
+	TeamName             string     `json:"teamName"`
+	LocationName         string     `json:"locationName"`
+	FirstYearOfPlay      string     `json:"firstYearOfPlay"`
+	Division             Division   `json:"division"`
+	Conference           Conference `json:"conference"`
+	Franchise            Franchise  `json:"franchise"`
+	Roster               Roster     `json:"roster"`
+	NextGameSchedule     Schedule   `json:"nextGameSchedule"`
+	PreviousGameSchedule Schedule   `json:"previousGameSchedule"`
+	ShortName            string     `json:"shortName"`
+	OfficialSiteURL      string     `json:"officialSiteUrl"`
+	FranchiseID          int        `json:"franchiseId"`
+	Active               bool       `json:"active"`
 }
 
 type TeamStatsForType struct {
-	Type   StatType `json:"type"`
+	Type   StatType         `json:"type"`
 	Splits []TeamStatsSplit `json:"splits"`
 }
 
@@ -134,7 +136,7 @@ type teamStatsForType struct {
 	Type   StatType `json:"type"`
 	Splits []struct {
 		Stat *json.RawMessage `json:"stat"`
-		Team Team            `json:"team"`
+		Team Team             `json:"team"`
 	} `json:"splits"`
 }
 
@@ -207,7 +209,7 @@ type TeamStatRanks struct {
 
 type RosterPlayer struct {
 	Person       Player   `json:"person"`
-	JerseyNumber int   `json:"jerseyNumber,string"`
+	JerseyNumber int      `json:"jerseyNumber,string"`
 	Position     Position `json:"position"`
 }
 

@@ -12,7 +12,7 @@ import (
 type JsonDate time.Time
 
 type Height struct {
-	Feet int
+	Feet   int
 	Inches int
 }
 
@@ -51,8 +51,8 @@ func (h *Height) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	*h = Height {
-		Feet: f,
+	*h = Height{
+		Feet:   f,
 		Inches: i,
 	}
 	return nil

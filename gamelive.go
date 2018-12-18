@@ -37,14 +37,14 @@ func (c *Client) GetGamePlays(id int, time time.Time) (Plays, int) {
 }
 
 type LiveFeed struct {
-	GamePk    int    `json:"gamePk"`
-	Link      string `json:"link"`
-	MetaData  struct {
+	GamePk   int    `json:"gamePk"`
+	Link     string `json:"link"`
+	MetaData struct {
 		Wait      int    `json:"wait"`
 		TimeStamp string `json:"timeStamp"`
 	} `json:"metaData"`
 	GameData struct {
-		Game GameHeader `json:"game"`
+		Game     GameHeader `json:"game"`
 		Datetime struct {
 			DateTime    time.Time `json:"dateTime"`
 			EndDateTime time.Time `json:"endDateTime"`
@@ -55,7 +55,7 @@ type LiveFeed struct {
 			Home Team `json:"home"`
 		} `json:"teams"`
 		Players map[string]Skater `json:"players"`
-		Venue Venue `json:"venue"`
+		Venue   Venue             `json:"venue"`
 	} `json:"gameData"`
 	LiveData LiveData `json:"liveData"`
 }
@@ -65,9 +65,9 @@ type BasicLiveFeed struct {
 }
 
 type LiveData struct {
-	Plays Plays `json:"plays"`
+	Plays     Plays     `json:"plays"`
 	Linescore Linescore `json:"linescore"`
-	Boxscore Boxscore `json:"boxscore"`
+	Boxscore  Boxscore  `json:"boxscore"`
 	Decisions Decisions `json:"decisions"`
 }
 
@@ -78,9 +78,9 @@ type GameHeader struct {
 }
 
 type Plays struct {
-	AllPlays []Play `json:"allPlays"`
-	ScoringPlays  []int `json:"scoringPlays"`
-	PenaltyPlays  []int `json:"penaltyPlays"`
+	AllPlays      []Play `json:"allPlays"`
+	ScoringPlays  []int  `json:"scoringPlays"`
+	PenaltyPlays  []int  `json:"penaltyPlays"`
 	PlaysByPeriod []struct {
 		StartIndex int   `json:"startIndex"`
 		Plays      []int `json:"plays"`

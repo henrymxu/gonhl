@@ -12,7 +12,9 @@ const endpointStatTypes = "/statTypes"
 
 // GetPlayer retrieves information about a single NHL player using a player ID.
 func (c *Client) GetPlayer(id int) (Player, int) {
-	var player struct{ People []Player `json:"people"` }
+	var player struct {
+		People []Player `json:"people"`
+	}
 	status := c.makeRequest(fmt.Sprintf(endpointPlayer, id), nil, &player)
 	return player.People[0], status
 }
@@ -26,7 +28,9 @@ func (c *Client) GetPlayer(id int) (Player, int) {
 // The parent struct holds an interface{} type and requires reflection to access the proper values of the stat.
 // The proper types can be converted to using ConvertPlayerStatsToSkaterStats and ConvertStatsToGoalieStats.
 func (c *Client) GetPlayerStats(params *PlayerParams) ([]PlayerStatsForType, int) {
-	var playerStats struct{ Stats []playerStatsForType `json:"stats"` }
+	var playerStats struct {
+		Stats []playerStatsForType `json:"stats"`
+	}
 	status := c.makeRequest(fmt.Sprintf(endpointPlayerStats, params.id), parseParams(params), &playerStats)
 	parsedStats := make([]PlayerStatsForType, len(playerStats.Stats))
 	for statType, stat := range playerStats.Stats {
@@ -107,12 +111,12 @@ type Player struct {
 	Weight             int      `json:"weight"`
 	Active             bool     `json:"active"`
 	AlternateCaptain   bool     `json:"alternateCaptain"`
-	Captain            bool          `json:"captain"`
-	Rookie             bool          `json:"rookie"`
-	ShootsCatches      string        `json:"shootsCatches"`
-	RosterStatus       string        `json:"rosterStatus"`
-	CurrentTeam        Team          `json:"currentTeam"`
-	PrimaryPosition    Position      `json:"primaryPosition"`
+	Captain            bool     `json:"captain"`
+	Rookie             bool     `json:"rookie"`
+	ShootsCatches      string   `json:"shootsCatches"`
+	RosterStatus       string   `json:"rosterStatus"`
+	CurrentTeam        Team     `json:"currentTeam"`
+	PrimaryPosition    Position `json:"primaryPosition"`
 }
 
 type Position struct {

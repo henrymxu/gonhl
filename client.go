@@ -19,24 +19,24 @@ type Client struct {
 
 func NewClient() *Client {
 	customHttp := &http.Client{
-		Timeout: time.Second * 10,
+		Timeout:   time.Second * 10,
 		Transport: buildCustomTransport(),
 	}
 
 	return &Client{
-		baseURL:baseAddress,
+		baseURL:    baseAddress,
 		httpClient: customHttp,
 	}
 }
 
-func (c *Client) makeRequest(endpoint string, params map[string]string, schema interface{}) (int){
+func (c *Client) makeRequest(endpoint string, params map[string]string, schema interface{}) int {
 	body, status := c.makeRequestWithoutJson(endpoint, params)
 	json.Unmarshal(body, schema)
 	return status
 }
 
-func (c *Client) makeRequestWithoutJson(endpoint string, params map[string]string) ([]byte, int){
-	request, _ := http.NewRequest("GET", c.baseURL + endpoint, nil)
+func (c *Client) makeRequestWithoutJson(endpoint string, params map[string]string) ([]byte, int) {
+	request, _ := http.NewRequest("GET", c.baseURL+endpoint, nil)
 	request.Header.Set("Content-Type", "application/json")
 	query := request.URL.Query()
 	for key, value := range params {

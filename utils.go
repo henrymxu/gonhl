@@ -53,7 +53,7 @@ func ConvertTimeToSeconds(timeString string) int {
 	parts := strings.Split(timeString, ":")
 	minutes, _ := strconv.Atoi(parts[0])
 	seconds, _ := strconv.Atoi(parts[1])
-	return minutes * 60 + seconds
+	return minutes*60 + seconds
 }
 
 // expandQuery concatenates boolean flags to be used in HTTP queries.
@@ -82,7 +82,7 @@ func combineIntArray(array []int) string {
 
 // createSeasonString converts a year into a string representing an NHL season.
 func createSeasonString(season int) string {
-	return fmt.Sprintf("%d%d", season, season + 1)
+	return fmt.Sprintf("%d%d", season, season+1)
 }
 
 // createTimeStamp converts a time.Time object into a string representing a date with format `yyyymmdd_hhmmss`.
