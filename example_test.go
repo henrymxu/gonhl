@@ -177,3 +177,24 @@ func ExampleClient_GetSchedule() {
 	// 23
 	// 0
 }
+
+// Example of retrieving only the live data of a game.
+func ExampleClient_GetGameLiveData() {
+	client := gonhl.NewClient()
+	feed, _ := client.GetGameLiveData(2018020514)
+	fmt.Println(feed.Boxscore.Teams.Home.Team.Name)
+	fmt.Println(feed.Boxscore.Teams.Home.OnIcePlus[0].PlayerID)
+	// Output:
+	// Montréal Canadiens
+	// 8470642
+}
+
+func ExampleClient_GetGameLiveFeed() {
+	client := gonhl.NewClient()
+	feed, _ := client.GetGameLiveFeed(2018020514)
+	fmt.Println(feed.LiveData.Boxscore.Teams.Home.Team.Name)
+	fmt.Println(feed.LiveData.Boxscore.Teams.Home.OnIcePlus[0].PlayerID)
+	// Output:
+	// Montréal Canadiens
+	// 8470642
+}

@@ -17,6 +17,15 @@ func (c *Client) GetGameLiveFeed(id int) (LiveFeed, int) {
 	return live, status
 }
 
+// GetGameLiveData retrieves only the live data portion from a specific NHL game.
+// This should be a faster call than GetGameLiveFeed due to the smaller unmarshalling.
+// The endpoint call is still the exact same as GetGameLiveFeed due to the limitations of the API
+func (c *Client) GetGameLiveData(id int) (LiveData, int) {
+	var live BasicLiveFeed
+	status := c.makeRequest(fmt.Sprintf(endpointGameLive, id), nil, &live)
+	return live.LiveData, status
+}
+
 // GetGamePlays retrieves only the newest plays from a specific NHL game.
 // All plays after a certain time (not relative to game) are retrieved.
 func (c *Client) GetGamePlays(id int, time time.Time) (Plays, int) {
@@ -48,12 +57,18 @@ type LiveFeed struct {
 		Players map[string]Skater `json:"players"`
 		Venue Venue `json:"venue"`
 	} `json:"gameData"`
-	LiveData struct {
-		Plays Plays `json:"plays"`
-		Linescore Linescore `json:"linescore"`
-		Boxscore Boxscore `json:"boxscore"`
-		Decisions Decisions `json:"decisions"`
-	} `json:"liveData"`
+	LiveData LiveData `json:"liveData"`
+}
+
+type BasicLiveFeed struct {
+	LiveData LiveData `json:"liveData"`
+}
+
+type LiveData struct {
+	Plays Plays `json:"plays"`
+	Linescore Linescore `json:"linescore"`
+	Boxscore Boxscore `json:"boxscore"`
+	Decisions Decisions `json:"decisions"`
 }
 
 type GameHeader struct {
