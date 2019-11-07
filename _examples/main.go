@@ -106,11 +106,11 @@ func testGameLive(client *gonhl.Client) {
 	fmt.Println(live.GameData.Status.DetailedState)
 }
 
-func testLivePlays(client *gonhl.Client) {
+func testGameLiveDataDiff(client *gonhl.Client) {
 	location, _ := time.LoadLocation("America/Toronto")
 	date := time.Date(2018, 10, 27, 16, 0, 0, 0, location)
-	live, _ := client.GetGamePlays(2018020150, date)
-	fmt.Println(live.ScoringPlays)
+	live, _ := client.GetGameLiveDataDiff(2018020150, date)
+	fmt.Println(live.Plays.ScoringPlays)
 }
 
 func testBoxscore(client *gonhl.Client) {

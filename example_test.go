@@ -198,3 +198,15 @@ func ExampleClient_GetGameLiveFeed() {
 	// Montréal Canadiens
 	// 8470642
 }
+
+func ExampleClient_GetGamePlaysAndPlayers() {
+	client := gonhl.NewClient()
+	location, _ := time.LoadLocation("America/Toronto")
+	date := time.Date(2018, 10, 27, 16, 0, 0, 0, location)
+	liveData, _ := client.GetGameLiveDataDiff(2018020150, date)
+	fmt.Println(liveData.Plays.AllPlays[15].Result.Description)
+	fmt.Println(liveData.Boxscore.Teams.Home.OnIcePlus[0].PlayerID)
+	// Output:
+	// Zack Kassian hit Anthony Bitetto
+	// 8474056
+}

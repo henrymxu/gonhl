@@ -28,13 +28,26 @@ func (c *Client) GetGameLiveData(id int) (LiveData, int) {
 
 // GetGamePlays retrieves only the newest plays from a specific NHL game.
 // All plays after a certain time (not relative to game) are retrieved.
+// This endpoint call is still the exact same as GetGameLiveData due to the limitations of the API
+func (c *Client) GetGameLiveDataDiff(id int, time time.Time) (LiveData, int) {
+	var live BasicLiveFeed
+	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
+		"startTimecode": createTimeStamp(time),
+	}, &live)
+	return live.LiveData, status
+}
+
+// GetGamePlays retrieves only the newest plays from a specific NHL game.
+// All plays after a certain time (not relative to game) are retrieved.
+// This endpoint call is still the exact same as GetGameLiveData due to the limitations of the API
 func (c *Client) GetGamePlays(id int, time time.Time) (Plays, int) {
-	var live LiveFeed
+	var live BasicLiveFeed
 	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
 		"startTimecode": createTimeStamp(time),
 	}, &live)
 	return live.LiveData.Plays, status
 }
+
 
 type LiveFeed struct {
 	GamePk   int    `json:"gamePk"`
@@ -43,25 +56,27 @@ type LiveFeed struct {
 		Wait      int    `json:"wait"`
 		TimeStamp string `json:"timeStamp"`
 	} `json:"metaData"`
-	GameData struct {
-		Game     GameHeader `json:"game"`
-		Datetime struct {
-			DateTime    time.Time `json:"dateTime"`
-			EndDateTime time.Time `json:"endDateTime"`
-		} `json:"datetime"`
-		Status GameStatus `json:"status"`
-		Teams  struct {
-			Away Team `json:"away"`
-			Home Team `json:"home"`
-		} `json:"teams"`
-		Players map[string]Skater `json:"players"`
-		Venue   Venue             `json:"venue"`
-	} `json:"gameData"`
+	GameData GameData `json:"gameData"`
 	LiveData LiveData `json:"liveData"`
 }
 
 type BasicLiveFeed struct {
 	LiveData LiveData `json:"liveData"`
+}
+
+type GameData struct {
+	Game     GameHeader `json:"game"`
+	Datetime struct {
+		DateTime    time.Time `json:"dateTime"`
+		EndDateTime time.Time `json:"endDateTime"`
+	} `json:"datetime"`
+	Status GameStatus `json:"status"`
+	Teams  struct {
+		Away Team `json:"away"`
+		Home Team `json:"home"`
+	} `json:"teams"`
+	Players map[string]Skater `json:"players"`
+	Venue   Venue             `json:"venue"`
 }
 
 type LiveData struct {
