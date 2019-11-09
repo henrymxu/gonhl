@@ -205,8 +205,16 @@ func ExampleClient_GetGamePlaysAndPlayers() {
 	date := time.Date(2018, 10, 27, 16, 0, 0, 0, location)
 	liveData, _ := client.GetGameLiveDataDiff(2018020150, date)
 	fmt.Println(liveData.Plays.AllPlays[15].Result.Description)
+	fmt.Println(liveData.Plays.AllPlays[15].Result.Event)
+	fmt.Println(liveData.Plays.AllPlays[15].Result.EventCode)
+	fmt.Println(liveData.Plays.AllPlays[15].Result.EventTypeID)
 	fmt.Println(liveData.Boxscore.Teams.Home.OnIcePlus[0].PlayerID)
+	fmt.Println(liveData.Boxscore.Teams.Home.Players["ID8476887"].Person.FullName)
 	// Output:
 	// Zack Kassian hit Anthony Bitetto
+	// Hit
+	// NSH55
+	// HIT
 	// 8474056
+	// Filip Forsberg
 }
