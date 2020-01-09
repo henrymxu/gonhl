@@ -1,6 +1,7 @@
 package gonhl
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -31,10 +32,16 @@ func (c *Client) GetGameLiveData(id int) (LiveData, int) {
 // This endpoint call is still the exact same as GetGameLiveData due to the limitations of the API
 func (c *Client) GetGameLiveDataDiff(id int, time time.Time) (LiveData, int) {
 	var live BasicLiveFeed
-	status := c.makeRequest(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
-		"startTimecode": createTimeStamp(time),
-	}, &live)
-	return live.LiveData, status
+	result, _ := c.makeRequestWithoutJson(fmt.Sprintf(endpointGameLiveDiff, id), map[string]string{
+		"startTimecode": createTimeStamp(time)})
+	var diff diffResponse
+	_ = json.Unmarshal(result, &diff)
+	if len(diff) == 0 {
+		_ = json.Unmarshal(result, &live)
+	} else {
+		fmt.Printf("Diff for game %d: %v\n", id, diff[0].Diff)
+	}
+	return live.LiveData, 0
 }
 
 // GetGamePlays retrieves only the newest plays from a specific NHL game.
@@ -112,8 +119,8 @@ type Play struct {
 	Result      Result `json:"result"`
 	About       About  `json:"about"`
 	Coordinates struct {
-		X int `json:"x"`
-		Y int `json:"y"`
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
 	} `json:"coordinates"`
 	Team Team `json:"team"`
 }
@@ -146,4 +153,14 @@ type About struct {
 		Away int `json:"away"`
 		Home int `json:"home"`
 	} `json:"goals"`
+}
+
+type diffResponse[] struct {
+	Diff []Diff `json:"diff"`
+}
+
+type Diff struct {
+	Op    string `json:"op"`
+	Path  string `json:"path"`
+	Value string `json:"value,omitempty"`
 }

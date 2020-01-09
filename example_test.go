@@ -184,9 +184,11 @@ func ExampleClient_GetGameLiveData() {
 	feed, _ := client.GetGameLiveData(2018020514)
 	fmt.Println(feed.Boxscore.Teams.Home.Team.Name)
 	fmt.Println(feed.Boxscore.Teams.Home.OnIcePlus[0].PlayerID)
+	fmt.Println(feed.Plays.CurrentPlay.About.DateTime.String())
 	// Output:
 	// Montréal Canadiens
 	// 8470642
+	// 2018-12-18 03:00:57 +0000 UTC
 }
 
 func ExampleClient_GetGameLiveFeed() {

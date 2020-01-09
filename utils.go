@@ -87,6 +87,8 @@ func createSeasonString(season int) string {
 
 // createTimeStamp converts a time.Time object into a string representing a date with format `yyyymmdd_hhmmss`.
 func createTimeStamp(date time.Time) string {
-	return fmt.Sprintf("%d%d%d_%d%d%d", date.Year(),
-		date.Month(), date.Day(), date.Hour(), date.Minute(), date.Second())
+	loc, _ := time.LoadLocation("UTC")
+	date = date.In(loc)
+	dateFormatString := "2006-01-02_15-04-05"
+	return strings.Replace(date.Format(dateFormatString), "-", "", -1)
 }

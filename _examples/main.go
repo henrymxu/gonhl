@@ -8,7 +8,7 @@ import (
 
 func main() {
 	client := gonhl.NewClient()
-	testLivePlays(client)
+	testSchedule(client)
 }
 
 func testSchedule(client *gonhl.Client) {
